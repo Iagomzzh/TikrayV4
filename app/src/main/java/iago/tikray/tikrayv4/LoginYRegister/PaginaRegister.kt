@@ -2,12 +2,14 @@ package iago.tikray.tikrayv4.LoginYRegister
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -18,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -46,6 +50,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
         val correo: String by registerViewModel.correo.observeAsState(initial = "")
         val contrasenya: String by registerViewModel.contrasenya.observeAsState(initial = "")
         val confirmarContrasenya by registerViewModel.confirmarContrasenya.observeAsState(initial = "")
+        val estadoIcono by registerViewModel.estadoIcono.observeAsState(false)
 
 
         //LOGO
@@ -115,6 +120,13 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                     confirmarContrasenya
                 )
             },
+            trailingIcon = {
+                Icon(
+                    imageVector = registerViewModel.elegirIcono(estadoIcono),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.clickable { registerViewModel.iconoPassword(estadoIcono)})
+            },
             label = { Text(text = "Constraseña") },
             colors = Colorss(),
             modifier = Modifier.constrainAs(textFieldContrasenya) {
@@ -129,7 +141,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             progress = registerViewModel.calcularProgreso(contrasenya),
             trackColor = registerViewModel.mostrarBarraProgressBar(contrasenya),
             color = registerViewModel.colorProgressBar(contrasenya),
-            modifier = Modifier.constrainAs(progressBar){
+            modifier = Modifier.constrainAs(progressBar) {
                 top.linkTo(textFieldContrasenya.bottom)
                 bottom.linkTo(textFIeldConfirmarContrasenya.top)
                 start.linkTo(textFieldContrasenya.start)
@@ -153,16 +165,19 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                 end.linkTo(parent.end)
 
 
+            })
+        Text(
+            text = "Las contrasenyas no coinciden",
+            color = registerViewModel.contrasenyasCoinciden(contrasenya, confirmarContrasenya),
+            modifier = Modifier.constrainAs(textoContrasenyasCoinciden) {
+                top.linkTo(textFIeldConfirmarContrasenya.bottom, margin = 8.dp)
+                start.linkTo(textFieldContrasenya.start)
 
             })
-        Text(text = "Las contrasenyas no coinciden", color = registerViewModel.contrasenyasCoinciden(contrasenya, confirmarContrasenya), modifier = Modifier.constrainAs(textoContrasenyasCoinciden){
-            top.linkTo(textFIeldConfirmarContrasenya.bottom, margin = 8.dp)
-            start.linkTo(textFieldContrasenya.start)
-
-        })
 
 
-        Button(onClick = { navegarBoton2(navigationController) },
+        Button(
+            onClick = { navegarBoton2(navigationController) },
             colors = ColorsButton(),
             modifier = Modifier
                 .fillMaxWidth()

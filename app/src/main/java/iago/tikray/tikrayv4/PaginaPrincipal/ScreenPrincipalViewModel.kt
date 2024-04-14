@@ -2,7 +2,14 @@
 
 package iago.tikray.tikrayv4.PaginaPrincipal
 
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -39,6 +46,7 @@ class RegisterViewModel : ViewModel() {
         _correo.value = correo
         _contrasenya.value = contrasenya
         _confirmarContrasenya.value = confirmarContrasenya
+
         return if (_nombre.value!!.isNotEmpty() && _correo.value!!.isNotEmpty() && _contrasenya.value!!.isNotEmpty() && _confirmarContrasenya.value!!.isNotEmpty() && _contrasenya.value == _confirmarContrasenya.value && _contrasenya.value!!.length > 6) {
             true
 
@@ -71,6 +79,10 @@ class RegisterViewModel : ViewModel() {
     private val _progresoBarraContrasenya = MutableLiveData<Float>()
     val progresoBarraContrasenya: LiveData<Float> = _progresoBarraContrasenya
 
+    //Estado icono
+    private val _estadoIcono = MutableLiveData<Boolean>()
+    val estadoIcono: LiveData<Boolean> = _estadoIcono
+
     fun calcularProgreso(progreso: String): Float {
         val numeroLenght = progreso.length
         return when (numeroLenght) {
@@ -95,7 +107,9 @@ class RegisterViewModel : ViewModel() {
         }
 
 
+
     }
+
 
     fun colorProgressBar(contrasenya: String): Color {
         return when (contrasenya.length) {
@@ -109,6 +123,27 @@ class RegisterViewModel : ViewModel() {
     fun contrasenyasCoinciden(contrasenya: String, confirmarContrasenya: String): Color {
         return if (contrasenya.isEmpty() || confirmarContrasenya.isEmpty() || contrasenya == confirmarContrasenya) Color.Transparent else Color.Red
 
+    }
+    fun iconoPassword(iconoEstado: LiveData<Boolean>):Boolean {
+       val  iconoEstado = !iconoEstado
+        return iconoEstado
+
+
+
+
+
+    }
+    fun cambio() {
+        estadoIcono = iconoPassword(estadoIcono)
+    }
+
+
+    fun elegirIcono(iconoEstado: Boolean): ImageVector {
+        if(iconoEstado) {return Icons.Rounded.VisibilityOff
+        }
+        else {
+            return  Icons.Rounded.Visibility
+        }
     }
 
 }
