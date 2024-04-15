@@ -10,6 +10,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -124,26 +126,36 @@ class RegisterViewModel : ViewModel() {
         return if (contrasenya.isEmpty() || confirmarContrasenya.isEmpty() || contrasenya == confirmarContrasenya) Color.Transparent else Color.Red
 
     }
-    fun iconoPassword(iconoEstado: LiveData<Boolean>):Boolean {
-       val  iconoEstado = !iconoEstado
-        return iconoEstado
+    fun iconoPassword(iconoEstado: Boolean) {
+        _estadoIcono.value = !iconoEstado
+
 
 
 
 
 
     }
-    fun cambio() {
-        estadoIcono = iconoPassword(estadoIcono)
-    }
+
 
 
     fun elegirIcono(iconoEstado: Boolean): ImageVector {
-        if(iconoEstado) {return Icons.Rounded.VisibilityOff
-        }
-        else {
-            return  Icons.Rounded.Visibility
+        val icono = if (iconoEstado) {Icons.Rounded.Visibility} else{Icons.Rounded.VisibilityOff}
+        return icono
+    }
+
+
+    fun mostrarPassword(estado:Boolean): VisualTransformation {
+        if (!estado) {
+            return PasswordVisualTransformation()
+
+        } else {
+
+            return VisualTransformation.None
+
+
         }
     }
 
 }
+
+

@@ -6,6 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Visibility
+import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -77,6 +80,8 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             },
             label = { Text(text = "Nombre") },
             colors = Colorss(),
+            maxLines = 1,
+            singleLine = true,
             modifier = Modifier.constrainAs(textFieldNombre) {
 
                 top.linkTo(logo.bottom, margin = 50.dp)
@@ -100,6 +105,8 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             },
             label = { Text(text = "Correo electronico") },
             colors = Colorss(),
+            maxLines = 1,
+            singleLine = true,
             modifier = Modifier.constrainAs(textFieldCorreo) {
 
                 top.linkTo(textFieldNombre.bottom, margin = 10.dp)
@@ -108,6 +115,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
 
 
             })
+
 
         //TEXTFIELD CONSTRASENYA
         OutlinedTextField(
@@ -120,15 +128,20 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                     confirmarContrasenya
                 )
             },
+
+
             trailingIcon = {
                 Icon(
-                    imageVector = registerViewModel.elegirIcono(estadoIcono),
+                    imageVector =registerViewModel.elegirIcono(estadoIcono),
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.clickable { registerViewModel.iconoPassword(estadoIcono)})
+                    modifier = Modifier.clickable {registerViewModel.iconoPassword(estadoIcono)})
             },
             label = { Text(text = "Constraseña") },
             colors = Colorss(),
+            maxLines = 1,
+            singleLine = true,
+            visualTransformation = registerViewModel.mostrarPassword(estadoIcono),
             modifier = Modifier.constrainAs(textFieldContrasenya) {
 
                 top.linkTo(textFieldCorreo.bottom, margin = 35.dp)
@@ -158,6 +171,9 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             onValueChange = { registerViewModel.cambioDatos(name, correo, contrasenya, it) },
             label = { Text(text = "Confirmar contraseña") },
             colors = Colorss(),
+            maxLines = 1,
+            singleLine = true,
+            visualTransformation = registerViewModel.mostrarPassword(estadoIcono),
             modifier = Modifier.constrainAs(textFIeldConfirmarContrasenya) {
 
                 top.linkTo(textFieldContrasenya.bottom, margin = 15.dp)
@@ -165,7 +181,14 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                 end.linkTo(parent.end)
 
 
-            })
+            },
+            trailingIcon = {
+                Icon(
+                    imageVector =registerViewModel.elegirIcono(estadoIcono),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.clickable {registerViewModel.iconoPassword(estadoIcono)})
+            },)
         Text(
             text = "Las contrasenyas no coinciden",
             color = registerViewModel.contrasenyasCoinciden(contrasenya, confirmarContrasenya),
