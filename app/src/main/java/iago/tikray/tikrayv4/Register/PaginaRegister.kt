@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.LoginYRegister
+package iago.tikray.tikrayv4.Register
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -6,9 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Visibility
-import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
@@ -23,8 +20,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -32,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import iago.tikray.tikrayv4.PaginaPrincipal.RegisterViewModel
 import iago.tikray.tikrayv4.PaginaPrincipal.navegarBoton2
 import iago.tikray.tikrayv4.R
 
@@ -201,7 +195,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
 
         Button(
             onClick = { navegarBoton2(navigationController) },
-            colors = ColorsButton(),
+            colors = colorsButton(),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 75.dp, end = 75.dp)
@@ -243,7 +237,7 @@ fun Colorss(): TextFieldColors {
 
 
 @Composable
-fun ColorsButton(): ButtonColors {
+fun colorsButton(): ButtonColors {
     val colors = ButtonDefaults.buttonColors(
         contentColor = colorResource(id = R.color.tikrayColor1),
         containerColor = Color.White,

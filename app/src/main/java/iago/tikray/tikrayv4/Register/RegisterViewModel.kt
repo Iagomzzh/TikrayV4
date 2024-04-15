@@ -1,15 +1,12 @@
 @file:Suppress("UNUSED_EXPRESSION")
 
-package iago.tikray.tikrayv4.PaginaPrincipal
+package iago.tikray.tikrayv4.Register
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
@@ -18,17 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
 import iago.tikray.tikrayv4.navegacion.Ruta
 
-fun navegarBoton1(navigationController: NavController): () -> Unit {
-    val nav: Any = navigationController.navigate(Ruta.PaginaRegister.route)
-    return { nav }
 
-}
-
-
-fun navegarBoton2(navigationController: NavController): () -> Unit {
-    val nav: Any = navigationController.navigate(Ruta.PaginaLogin.route)
-    return { nav }
-}
 
 
 class RegisterViewModel : ViewModel() {

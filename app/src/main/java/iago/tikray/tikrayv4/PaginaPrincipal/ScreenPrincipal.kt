@@ -16,6 +16,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import iago.tikray.tikrayv4.R
+import iago.tikray.tikrayv4.PaginaPrincipal.navegarBoton1
+import iago.tikray.tikrayv4.PaginaPrincipal.navegarBoton2
 
 @Composable
 fun ScreenPrincipal(navigationController: NavHostController) {
