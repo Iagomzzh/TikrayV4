@@ -5,6 +5,7 @@ package iago.tikray.tikrayv4.Register
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -12,6 +13,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import iago.tikray.tikrayv4.AlertDialogExample
 
 
 class RegisterViewModel : ViewModel() {
@@ -142,6 +144,17 @@ class RegisterViewModel : ViewModel() {
     }
     fun registrar(correo:String, contrasenya: String) {
         register(correo, contrasenya)
+    }
+
+    @Composable
+    fun DialogoEjemplo(show: LiveData<Boolean> = estadoRegister, titulo:String, textoBody:String){
+        AlertDialogExample(
+            show = show,
+            dismiss = { /*TODO*/ },
+            confirm = { /*TODO*/ },
+            textTitle = titulo,
+            textBody = textoBody
+        )
     }
 
 }
