@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.navegacion
+package iago.tikray.tikrayv4.Navegacion
 
 sealed class Ruta(val route:String) {
     object PaginaPrincipal:Ruta("PaginaPrincipal")

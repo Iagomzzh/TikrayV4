@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.navegacion
+package iago.tikray.tikrayv4.Navegacion
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

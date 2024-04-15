@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.navegacion.ui.theme
+package iago.tikray.tikrayv4.Navegacion.ui.theme
 
 import android.app.Activity
 import android.os.Build

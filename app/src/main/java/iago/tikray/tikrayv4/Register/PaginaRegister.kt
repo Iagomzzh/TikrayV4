@@ -194,7 +194,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
 
 
         Button(
-            onClick = { navegarBoton2(navigationController) },
+            onClick = { registerViewModel.registrar(correo, contrasenya) },
             colors = colorsButton(),
             modifier = Modifier
                 .fillMaxWidth()

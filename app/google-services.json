@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "649231111029",
+    "project_id": "tikrayv4",
+    "storage_bucket": "tikrayv4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:649231111029:android:65e1c9703ab842c200393c",
+        "android_client_info": {
+          "package_name": "iago.tikray.tikrayv4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHy8bXU1GpCNr01A3lz2st13QKGEHxBTk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

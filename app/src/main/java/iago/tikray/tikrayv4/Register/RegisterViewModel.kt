@@ -12,10 +12,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavController
-import iago.tikray.tikrayv4.navegacion.Ruta
-
-
 
 
 class RegisterViewModel : ViewModel() {
@@ -43,6 +39,8 @@ class RegisterViewModel : ViewModel() {
             false
         }
     }
+
+
 
     //correo
     private val _correo = MutableLiveData<String>()
@@ -141,6 +139,9 @@ class RegisterViewModel : ViewModel() {
 
 
         }
+    }
+    fun registrar(correo:String, contrasenya: String) {
+        register(correo, contrasenya)
     }
 
 }

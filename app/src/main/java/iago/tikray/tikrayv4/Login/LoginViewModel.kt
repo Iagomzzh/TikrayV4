@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import iago.tikray.tikrayv4.navegacion.Ruta
+import iago.tikray.tikrayv4.Navegacion.Ruta
 
 class LoginViewModel : ViewModel() {
 
