@@ -6,36 +6,39 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.SignInMethodQueryResult
 import java.lang.Exception
 
 
-private val auth = FirebaseAuth.getInstance()
+val auth = FirebaseAuth.getInstance()
 private val _estadoRegister = MutableLiveData<Boolean>()
 val estadoRegister: LiveData<Boolean> = _estadoRegister
 
 
 fun register(correo: String, passwd: String) {
-    try {
-        auth.createUserWithEmailAndPassword(correo, passwd)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _estadoRegister.value = true
-                    Log.d("Registro satisfactorio", "El registro se ha completado correctamente")
+    auth.fetchSignInMethodsForEmail(correo).addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val signInMethods = task.result ?: return@addOnCompleteListener
+            if (signInMethods.signInMethods?.isEmpty() == true) {
+                auth.createUserWithEmailAndPassword(correo, passwd)
+                    .addOnCompleteListener { taskk ->
+                        if (taskk.isSuccessful) {
+                            _estadoRegister.value = true
+                            Log.d("Registro satisfactorio", "El registro se ha completado correctamente")
+                        } else {
+                            _estadoRegister.value = false
+                            Log.d("Error", "El usuario ya esta registrado")
 
-
-                } else {
-                    _estadoRegister.value = false
-                    Log.d("Error", "Error ${task.result}")
-                }
+                        }
+                    }
             }
-
-    } catch (e: Exception) {
-
-        Log.d("Error", "Error ")
+        } else {
+            Log.d("Error:", "$task")
+        }
     }
+
+
+
+
 }
-
-
-
-
-
