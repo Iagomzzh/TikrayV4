@@ -1,6 +1,8 @@
 package iago.tikray.tikrayv4.Register
 
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.LiveData
@@ -12,22 +14,28 @@ import java.lang.Exception
 
 
 val auth = FirebaseAuth.getInstance()
-private val _estadoRegister = MutableLiveData<Boolean>()
-val estadoRegister: LiveData<Boolean> = _estadoRegister
 
 
-fun register(correo: String, passwd: String) {
+
+
+
+var estado: Boolean = false
+
+@Composable
+fun register(correo: String, passwd: String, ) {
+
     auth.fetchSignInMethodsForEmail(correo).addOnCompleteListener { task ->
         if (task.isSuccessful) {
             val signInMethods = task.result ?: return@addOnCompleteListener
+
             if (signInMethods.signInMethods?.isEmpty() == true) {
                 auth.createUserWithEmailAndPassword(correo, passwd)
                     .addOnCompleteListener { taskk ->
                         if (taskk.isSuccessful) {
-                            _estadoRegister.value = true
+
+
                             Log.d("Registro satisfactorio", "El registro se ha completado correctamente")
                         } else {
-                            _estadoRegister.value = false
                             Log.d("Error", "El usuario ya esta registrado")
 
                         }

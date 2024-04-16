@@ -13,10 +13,14 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import iago.tikray.tikrayv4.AlertDialogExample
+import java.util.Calendar
 
 
 class RegisterViewModel : ViewModel() {
+    private val db = FirebaseFirestore.getInstance()
+
 
 
     //nombre
@@ -41,7 +45,6 @@ class RegisterViewModel : ViewModel() {
             false
         }
     }
-
 
 
     //correo
@@ -96,7 +99,6 @@ class RegisterViewModel : ViewModel() {
         }
 
 
-
     }
 
 
@@ -113,25 +115,25 @@ class RegisterViewModel : ViewModel() {
         return if (contrasenya.isEmpty() || confirmarContrasenya.isEmpty() || contrasenya == confirmarContrasenya) Color.Transparent else Color.Red
 
     }
+
     fun iconoPassword(iconoEstado: Boolean) {
         _estadoIcono.value = !iconoEstado
 
 
-
-
-
-
     }
 
 
-
     fun elegirIcono(iconoEstado: Boolean): ImageVector {
-        val icono = if (iconoEstado) {Icons.Rounded.Visibility} else{Icons.Rounded.VisibilityOff}
+        val icono = if (iconoEstado) {
+            Icons.Rounded.Visibility
+        } else {
+            Icons.Rounded.VisibilityOff
+        }
         return icono
     }
 
 
-    fun mostrarPassword(estado:Boolean): VisualTransformation {
+    fun mostrarPassword(estado: Boolean): VisualTransformation {
         if (!estado) {
             return PasswordVisualTransformation()
 
@@ -141,22 +143,27 @@ class RegisterViewModel : ViewModel() {
 
 
         }
-    }
-    fun registrar(correo:String, contrasenya: String) {
-        register(correo, contrasenya)
+
     }
 
-    @Composable
-    fun DialogoEjemplo(show: LiveData<Boolean> = estadoRegister, titulo:String, textoBody:String){
-        AlertDialogExample(
-            show = show,
-            dismiss = { /*TODO*/ },
-            confirm = { /*TODO*/ },
-            textTitle = titulo,
-            textBody = textoBody
+    fun botonGuardar() {
+        val calendar = Calendar.getInstance()
+        val dia = calendar.get(Calendar.DAY_OF_MONTH)
+        val mes = calendar.get(Calendar.MONTH) + 1 // Suma 1 porque los meses en Calendar van de 0 a 11
+        val año = calendar.get(Calendar.YEAR)
+
+        db.collection("users").document(correo.value.toString()).set(
+            hashMapOf("correo" to correo,
+                "Nombre" to name,
+                "fecha" to "$dia/$mes/$año")
         )
+
     }
+
 
 }
+
+
+
 
 
