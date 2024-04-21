@@ -1,5 +1,12 @@
 package iago.tikray.tikrayv4.Register
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +23,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -144,19 +152,29 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
 
 
             })
-        LinearProgressIndicator(
-            progress = registerViewModel.calcularProgreso(contrasenya),
-            trackColor = registerViewModel.mostrarBarraProgressBar(contrasenya),
-            color = registerViewModel.colorProgressBar(contrasenya),
-            modifier = Modifier.constrainAs(progressBar) {
-                top.linkTo(textFieldContrasenya.bottom)
-                bottom.linkTo(textFIeldConfirmarContrasenya.top)
-                start.linkTo(textFieldContrasenya.start)
+
+        AnimatedVisibility(visible = contrasenya.isNotEmpty(), modifier = Modifier.constrainAs(progressBar){
+            top.linkTo(textFieldContrasenya.bottom)
+            bottom.linkTo(textFIeldConfirmarContrasenya.top)
+            start.linkTo(textFieldContrasenya.start)
 
 
-            }
+        }) {
+            LinearProgressIndicator(
+                progress = registerViewModel.calcularProgreso(contrasenya),
+                trackColor = registerViewModel.mostrarBarraProgressBar(contrasenya),
+                color = registerViewModel.colorProgressBar(contrasenya)
 
-        )
+
+
+
+
+            )
+            
+        }
+
+
+
 
 
         //TEXTFIELD CONFIRMAR CONTRASENYA
@@ -194,7 +212,9 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
 
 
         Button(
-            onClick = { registerViewModel.botonGuardar() },
+            onClick = {
+                registerViewModel.registro()
+                      },
             colors = colorsButton(),
             modifier = Modifier
                 .fillMaxWidth()

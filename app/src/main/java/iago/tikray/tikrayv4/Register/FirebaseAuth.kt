@@ -7,9 +7,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.SignInMethodQueryResult
+import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
 
@@ -21,32 +24,11 @@ val auth = FirebaseAuth.getInstance()
 
 var estado: Boolean = false
 
-@Composable
-fun register(correo: String, passwd: String, ) {
-
-    auth.fetchSignInMethodsForEmail(correo).addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            val signInMethods = task.result ?: return@addOnCompleteListener
-
-            if (signInMethods.signInMethods?.isEmpty() == true) {
-                auth.createUserWithEmailAndPassword(correo, passwd)
-                    .addOnCompleteListener { taskk ->
-                        if (taskk.isSuccessful) {
-
-
-                            Log.d("Registro satisfactorio", "El registro se ha completado correctamente")
-                        } else {
-                            Log.d("Error", "El usuario ya esta registrado")
-
-                        }
-                    }
-            }
-        } else {
-            Log.d("Error:", "$task")
-        }
-    }
-
+ fun register(correo: String, passwd: String, ): FirebaseUser? {
+    return auth.createUserWithEmailAndPassword(correo, passwd).await().user
 
 
 
 }
+
+

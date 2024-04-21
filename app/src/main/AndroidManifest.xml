@@ -8,7 +8,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@drawable/logo_empresa"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo_empresa"
+        android:roundIcon="@drawable/icono"
         android:supportsRtl="true"
         android:theme="@style/Theme.TikrayV4"
         tools:targetApi="31">

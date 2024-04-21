@@ -2,6 +2,7 @@
 
 package iago.tikray.tikrayv4.Register
 
+import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
@@ -75,6 +76,19 @@ class RegisterViewModel : ViewModel() {
     private val _estadoIcono = MutableLiveData<Boolean>()
     val estadoIcono: LiveData<Boolean> = _estadoIcono
 
+    // Estado del registro
+
+      fun registro(): Boolean {
+        val registro:Boolean = register(correo = _correo.value.toString(), passwd = contrasenya.value.toString() )
+        Log.d("a", registro.toString())
+        return registro
+
+    }
+
+
+
+
+
     fun calcularProgreso(progreso: String): Float {
         val numeroLenght = progreso.length
         return when (numeroLenght) {
@@ -93,7 +107,7 @@ class RegisterViewModel : ViewModel() {
     fun mostrarBarraProgressBar(contrasenya: String): Color {
         val numeroLenght = contrasenya.length
         return if (numeroLenght == 0) {
-            Color.Transparent
+            Color.White
         } else {
             Color.White
         }
@@ -161,7 +175,12 @@ class RegisterViewModel : ViewModel() {
     }
 
 
+
+
 }
+
+
+
 
 
 
