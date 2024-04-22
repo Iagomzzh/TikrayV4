@@ -28,20 +28,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TikrayV4Theme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
+
+                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navigationController = rememberNavController()
+
                     NavHost(navController = navigationController, startDestination = Ruta.PaginaPrincipal.route  ) {
+
+                        // RUTAS PARA LA NAVEGACION
+
                         composable(Ruta.PaginaPrincipal.route) { ScreenPrincipal(navigationController) }
-                        composable(Ruta.PaginaRegister.route) { Register(navigationController, registerViewModel) }
+                        composable(Ruta.PaginaRegister.route) { Register( registerViewModel) }
                         composable(Ruta.PaginaLogin.route){ ScreenLogin(navigationController, loginViewModel)}
-                        composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada(navigationController)}
+                        composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada()}
+
+                        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
-
-
                 }
             }
         }

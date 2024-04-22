@@ -1,4 +1,3 @@
-@file:Suppress("UNUSED_EXPRESSION")
 
 package iago.tikray.tikrayv4.Register
 
@@ -8,6 +7,7 @@ import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -18,8 +18,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.firestore.FirebaseFirestore
+import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.AlertDialogExample
 
@@ -27,16 +26,57 @@ import com.google.firebase.auth.FirebaseAuth
 import java.util.Calendar
 import javax.inject.Inject
 
-@Suppress("UnusedEquals")
 @HiltViewModel
 class RegisterViewModel @Inject constructor() : ViewModel() {
-    private val db = FirebaseFirestore.getInstance()
+
+    //INSTANCIAS
+
+    //Instancia Firebase DataBase
+    //private val db = FirebaseFirestore.getInstance()
+
+    //instancia firebase Auth
+    private val auth = FirebaseAuth.getInstance()
 
 
-    //nombre
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //VARIABLES PRO
+
+    //Nombre
     private val _nombre = MutableLiveData<String>()
     val name: LiveData<String> = _nombre
 
+
+    //Correo
+    private val _correo = MutableLiveData<String>()
+    val correo: LiveData<String> = _correo
+
+
+    //Contrasenya
+    private val _contrasenya = MutableLiveData<String>()
+    val contrasenya: LiveData<String> = _contrasenya
+
+
+    //Confirmar contrasenya
+    private val _confirmarContrasenya = MutableLiveData<String>()
+    val confirmarContrasenya: LiveData<String> = _confirmarContrasenya
+
+
+    //Estado icono
+    private val _estadoIcono = MutableLiveData<Boolean>()
+    val estadoIcono: LiveData<Boolean> = _estadoIcono
+
+
+
+    //Información del registro, el valor es un 1 si el registro ha sido satisfactorio, si ha sido erroneo es 2
+    private val _goToNext = MutableLiveData<Int>()
+    val goToNext: LiveData<Int> = _goToNext
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //FUNCIÓN PARA CAMBIAR LOS DATOS Y ACTUALIZARLOS EN EL VIEW MODEL, ADEMAS RETORNA TRUE SI LOS CAMPOS NO ESTAN VACIOS, LAS CONTRASEÑAS COINCIDEN Y EL LENGTH ES SUPERIOR A 6, SI ALGUNO DE ESTAS COMPROBACIONES NO SE CUMPLE RETORNA FALSE
     fun cambioDatos(
         nombre: String,
         correo: String,
@@ -56,53 +96,23 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-
-    //correo
-    private val _correo = MutableLiveData<String>()
-    val correo: LiveData<String> = _correo
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    //Contrasenya
-    private val _contrasenya = MutableLiveData<String>()
-    val contrasenya: LiveData<String> = _contrasenya
+
+    // FUNCIÓN PARA RESTAURAR Y BORRAR LOS DATOS DE LOS TEXTFIELDS  DEL REGISTER, DE MOMENTO LO USO PARA CUANDO EL REGISTRO DA UN ERROR
+    private fun restaurarDatosRegister() {
+        _nombre.value = ""
+        _correo.value = ""
+        _contrasenya.value = ""
+        _confirmarContrasenya.value = ""
+    }
 
 
-    //Confirmar contrasenya
-    private val _confirmarContrasenya = MutableLiveData<String>()
-    val confirmarContrasenya: LiveData<String> = _confirmarContrasenya
-
-    //Boton Register
-
-    private val _botonRegister = MutableLiveData<Boolean>()
-    val botonRegister: LiveData<Boolean> = _botonRegister
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-    //Estado ProgressBar
-    private val _progresoBarraContrasenya = MutableLiveData<Float>()
-    val progresoBarraContrasenya: LiveData<Float> = _progresoBarraContrasenya
-
-    //Estado icono
-    private val _estadoIcono = MutableLiveData<Boolean>()
-    val estadoIcono: LiveData<Boolean> = _estadoIcono
-
-    private val _resultadoRegistro = MutableLiveData<AuthResult>()
-    val resultadoRegistro: LiveData<AuthResult> = _resultadoRegistro
-
-    private val auth = FirebaseAuth.getInstance()
-
-    // Register correcto
-
-    private val _goToNext = MutableLiveData<Int>()
-    val goToNext: LiveData<Int> = _goToNext
-
-    // Estado del registro
-
-    /*      fun registro(): Boolean {
-            val registro:Boolean = register(correo = _correo.value.toString(), passwd = contrasenya.value.toString() )
-            Log.d("a", registro.toString())
-            return registro
-        }*/
-
+    //FUNCION DE REGISTRO ADAPTADA CON ALERTIDALOGS, Y CON GESTION DE EXCEPCIONES
 
     fun register(username: String, password: String) {
         auth.createUserWithEmailAndPassword(username, password)
@@ -118,14 +128,13 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                         )
                     } else {
                         _goToNext.value = 2
-                        _resultadoRegistro.value = task.result
+
 
                         Log.d(
                             "Chivato Registro",
                             "Error creating user:  ${_goToNext.value}"
                         )
                     }
-                    //modifiyProcessing()
 
                 } catch (e: Exception) {
                     _goToNext.value = 2
@@ -142,6 +151,9 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // FUNCIÓN PARA QUE DEPENDIENDO DE LA LONGITUD DE LA CONTRASEÑA EL PROGRESS BAR QUE MARCA LA DIFICULTAT DE LA CONSTRASEÑA SE AJUSTE
 
     fun calcularProgreso(progreso: String): Float {
         val numeroLenght = progreso.length
@@ -158,6 +170,11 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    // FUNCIÓN PARA MOSTRAR LA PROGRESS BAR O NO, JUGANDO CON EL COLOR TRANSPARENTE, SI HAY 0 CARACTERES NO SE MOSTRARA, A LA QUE HAYA MÁS DE 1 SE MOSTRARA
+
     fun mostrarBarraProgressBar(contrasenya: String): Color {
         val numeroLenght = contrasenya.length
         return if (numeroLenght == 0) {
@@ -169,7 +186,10 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    // DEPENDIENDO DE LA LONGITUD DE LA CONSTRASEÑA LA PROGRESS EL COLOR TRACKER SE MOSTRARA ROJO, AMARILLO, VERDE
     fun colorProgressBar(contrasenya: String): Color {
         return when (contrasenya.length) {
             in 1..6 -> Color.Red
@@ -178,19 +198,27 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
         }
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+    // FUNCIÓN QUE CAMBIARA EL COLOR DEL TEXTO QUE NOTIFICA QUE LAS CONSTRASEÑAS DEBEN DE COINCIDIR, JUGANDO CON EL COLOR TRANSPARENTE PARA PODER HACERLO POSIBLE
     fun contrasenyasCoinciden(contrasenya: String, confirmarContrasenya: String): Color {
         return if (contrasenya.isEmpty() || confirmarContrasenya.isEmpty() || contrasenya == confirmarContrasenya) Color.Transparent else Color.Red
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    //FUNCIÓN PARA CAMBIAR EL ICONO PARA CAMBIAR EL ESTADO DE LA CONSTRASEÑA
     fun iconoPassword(iconoEstado: Boolean) {
         _estadoIcono.value = !iconoEstado
 
 
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+    //FUNCIÓN PARA CAMBIAR EL ICONO DEL MOSTRAR CONSTRASEÑA O NO, EN LOS TEXTFIELDS DE PASSWORD Y CONFIRMARPASSWORD
     fun elegirIcono(iconoEstado: Boolean): ImageVector {
         val icono = if (iconoEstado) {
             Icons.Rounded.Visibility
@@ -200,71 +228,72 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         return icono
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+
+    //FUNCIÓN PARA QUE SE HAGA EL EFECTO DE LOS ASTERISCOS EN LOS TEXTFIELDS DE LA CONSTRASEÑA Y CONFIRMAR CONSTRASEÑA
     fun mostrarPassword(estado: Boolean): VisualTransformation {
-        if (!estado) {
-            return PasswordVisualTransformation()
+        return if (!estado) {
+            PasswordVisualTransformation()
 
         } else {
 
-            return VisualTransformation.None
+            VisualTransformation.None
 
 
         }
 
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    fun botonGuardar() {
-        val calendar = Calendar.getInstance()
-        val dia = calendar.get(Calendar.DAY_OF_MONTH)
-        val mes =
-            calendar.get(Calendar.MONTH) + 1 // Suma 1 porque los meses en Calendar van de 0 a 11
-        val año = calendar.get(Calendar.YEAR)
 
-        db.collection("users").document(correo.value.toString()).set(
-            hashMapOf(
-                "correo" to correo,
-                "Nombre" to name,
-                "fecha" to "$dia/$mes/$año"
-            )
-        )
 
-    }
 
+
+    //FUNCIÓN PARA CREAR LOS ALERTDIALOGS PARA CUANDO SE PULSE EL BOTÓN DE REGISTER NOTIFIQUE AL USUARIO COMO HA IDO, Y PARA CONTROLAR SI SE MUESTRAN O NO LOS ALERTSDIALOGS
     @Composable
     fun DialogoRegister(valor: Int) {
-        var a by remember {
-            mutableStateOf(0)
+        var a by remember { mutableIntStateOf(0) }
 
-
-        }
         if (valor == 2 && a == 0) {
             AlertDialogExample(
                 dismiss = {
                     _goToNext.value = 0
                     a = 1
+                    restaurarDatosRegister()
                 },
                 confirm = {
                     _goToNext.value = 0
                     a = 1
+                    restaurarDatosRegister()
                 },
                 textTitle = "Error",
                 textBody = "Error en el registro:  No se ha podido Registrar el usuario, por un error desconocido, comprueba que este correo no este ya registrado"
             )
+
         } else if (valor == 1) {
             AlertDialogExample(
-                dismiss = { _goToNext.value = 0
-                          a = 1},
-                confirm = { /*TODO*/ },
+                dismiss = {
+                    _goToNext.value = 0
+                    a = 1
+
+                },
+                confirm = { _goToNext.value = 0
+                    a = 1 },
                 textTitle = "Registro Completado",
                 textBody = "Tu usuario ha sido registrado"
             )
 
+
+
+        } else {
+            a = 0
         }
-        else {a = 0}
 
 
     }
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 
 }

@@ -65,6 +65,8 @@ fun TikrayV4Theme(
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,
+
+
         content = content
     )
 }

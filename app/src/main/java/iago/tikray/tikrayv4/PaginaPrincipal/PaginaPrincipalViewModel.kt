@@ -3,14 +3,23 @@ package iago.tikray.tikrayv4.PaginaPrincipal
 import androidx.navigation.NavController
 import iago.tikray.tikrayv4.Navegacion.Ruta
 
-fun navegarBoton1(navigationController: NavController): () -> Unit {
+
+// BOTON PARA NAVEGAR DESDE LA PAGINA PRINCIPAL AL REGISTER
+fun navegarAlRegister(navigationController: NavController): () -> Unit {
     val nav: Any = navigationController.navigate(Ruta.PaginaRegister.route)
     return { nav }
 
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// BOTON PARA NAVEGAR DESDE LA PAGINA PRINCIPAL AL LOGIN
 
-fun navegarBoton2(navigationController: NavController): () -> Unit {
+fun navegarAlLogin(navigationController: NavController): () -> Unit {
     val nav: Any = navigationController.navigate(Ruta.PaginaLogin.route)
     return { nav }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// AÑADE AQUI MAS BOTONES DE NAVEGACIÓN
+

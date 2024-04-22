@@ -1,5 +1,6 @@
 package iago.tikray.tikrayv4.Register
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,34 +27,38 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import iago.tikray.tikrayv4.R
 @Composable
-fun Register(navigationController: NavHostController, registerViewModel: RegisterViewModel) {
-    ConstraintLayout(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.tikrayColor1))
-    )
+fun Register(registerViewModel: RegisterViewModel) {
+    ConstraintLayout(modifier = Modifier.fillMaxSize().background(colorResource(id = R.color.tikrayColor1)))
     {
 
-        // Definimos las referencias para poder colocar los elementos
+        // DEFINIMOS LAS REFERENCIAS PARA PODER COLOCARLAS DE LA FORMA QUE QUERAMOS
+
         val (logo, titulo, textFieldNombre, textFieldCorreo, textFieldContrasenya, progressBar, textFIeldConfirmarContrasenya, textoContrasenyasCoinciden, boton1) = createRefs()
         val margenSuperior = createGuidelineFromTop(0.25f)
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         // TEXTFIELDS SUSCRITOS AL VIEWMODEL
+
         val name: String by registerViewModel.name.observeAsState(initial = "")
         val correo: String by registerViewModel.correo.observeAsState(initial = "")
         val contrasenya: String by registerViewModel.contrasenya.observeAsState(initial = "")
         val confirmarContrasenya by registerViewModel.confirmarContrasenya.observeAsState(initial = "")
         val estadoIcono by registerViewModel.estadoIcono.observeAsState(false)
         val goNext by registerViewModel.goToNext.observeAsState(0)
-        val registerEstado by registerViewModel.resultadoRegistro.observeAsState()
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // FUNCIÓN PARA QUE EL DIALOG ALERT APAREZCA DEPENDIENDO DE SI EL REGISTRO HA SIDO SATISFACTORIO O NO
+
         registerViewModel.DialogoRegister(goNext)
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //LOGO
+
         Image(
             painter = painterResource(id = R.drawable.logo_empresa),
             contentDescription = "Logo de la Empresa",
@@ -63,6 +68,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                 end.linkTo(parent.end)
             })
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         //TEXTFIELD NOMBRE
         OutlinedTextField(
@@ -87,6 +93,8 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
 
 
             })
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         //TEXTFIELD CORREO
@@ -114,6 +122,8 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             })
 
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
         //TEXTFIELD CONSTRASENYA
         OutlinedTextField(
             value = contrasenya,
@@ -125,7 +135,6 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                     confirmarContrasenya
                 )
             },
-
 
             trailingIcon = {
                 Icon(
@@ -144,32 +153,22 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                 top.linkTo(textFieldCorreo.bottom, margin = 35.dp)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-
-
             })
 
         AnimatedVisibility(visible = contrasenya.isNotEmpty(), modifier = Modifier.constrainAs(progressBar){
             top.linkTo(textFieldContrasenya.bottom)
             bottom.linkTo(textFIeldConfirmarContrasenya.top)
-            start.linkTo(textFieldContrasenya.start)
+            start.linkTo(textFieldContrasenya.start) })
 
-
-        }) {
+        {
             LinearProgressIndicator(
                 progress = registerViewModel.calcularProgreso(contrasenya),
                 trackColor = registerViewModel.mostrarBarraProgressBar(contrasenya),
                 color = registerViewModel.colorProgressBar(contrasenya)
-
-
-
-
-
             )
-            
         }
 
-
-
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
         //TEXTFIELD CONFIRMAR CONTRASENYA
@@ -188,26 +187,24 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
 
-
             },
             trailingIcon = {
                 Icon(
                     imageVector =registerViewModel.elegirIcono(estadoIcono),
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.clickable {registerViewModel.iconoPassword(estadoIcono)})
-            },)
+                    modifier = Modifier.clickable {registerViewModel.iconoPassword(estadoIcono)}) },)
         Text(
             text = "Las contrasenyas no coinciden",
             color = registerViewModel.contrasenyasCoinciden(contrasenya, confirmarContrasenya),
             modifier = Modifier.constrainAs(textoContrasenyasCoinciden) {
                 top.linkTo(textFIeldConfirmarContrasenya.bottom, margin = 8.dp)
                 start.linkTo(textFieldContrasenya.start)
-
             })
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
+        // BOTÓN PARA INICIAR EL PROCESO DE REGISTRO
         Button(
             onClick = {
                 registerViewModel.register(correo, contrasenya)
@@ -224,23 +221,15 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             enabled = registerViewModel.cambioDatos(name, correo, contrasenya, confirmarContrasenya)
         ) {
             Text(text = "REGISTER")
-
-
         }
 
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
-
 }
 
-
-@Preview(showSystemUi = true)
-@Composable
-private fun Preview() {
-    Register(rememberNavController(), RegisterViewModel())
-
-}
-
+// FUNCIONES PARA AHORRAR CODIGO CON LOS COLORES
+@SuppressLint("ComposableNaming")
 @Composable
 fun Colorss(): TextFieldColors {
     val colors = OutlinedTextFieldDefaults.colors(
@@ -254,9 +243,6 @@ fun Colorss(): TextFieldColors {
     return colors
 }
 
-
-
-
 @Composable
 fun colorsButton(): ButtonColors {
     val colors = ButtonDefaults.buttonColors(
@@ -267,10 +253,18 @@ fun colorsButton(): ButtonColors {
     return colors
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
+//PREVIEW
+@Preview(showSystemUi = true)
+@Composable
+private fun Preview() {
+    Register(RegisterViewModel())
 
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
 

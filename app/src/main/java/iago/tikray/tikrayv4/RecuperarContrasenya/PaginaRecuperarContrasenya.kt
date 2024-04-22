@@ -9,12 +9,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
+
 import iago.tikray.tikrayv4.R
 
 @Composable
-fun PaginaContrasenyaOlvidada(navigationController: NavHostController) {
+fun PaginaContrasenyaOlvidada() {
     ConstraintLayout(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.tikrayColor1))) {
@@ -32,6 +31,6 @@ fun PaginaContrasenyaOlvidada(navigationController: NavHostController) {
 @Preview
 @Composable
 private fun Preview() {
-    PaginaContrasenyaOlvidada(navigationController = rememberNavController())
+    PaginaContrasenyaOlvidada()
 
 }

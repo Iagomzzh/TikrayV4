@@ -15,65 +15,82 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import iago.tikray.tikrayv4.R
-import iago.tikray.tikrayv4.PaginaPrincipal.navegarBoton1
-import iago.tikray.tikrayv4.PaginaPrincipal.navegarBoton2
 
 @Composable
 fun ScreenPrincipal(navigationController: NavHostController) {
-    ConstraintLayout(modifier = Modifier
-        .background(colorResource(id = R.color.tikrayColor1))
-        .fillMaxSize()) {
-        val (logo, titulo, boton1, boton2) = createRefs()
-        val margenSuperior = createGuidelineFromTop(0.25f)
+    ConstraintLayout(
+        modifier = Modifier
+            .background(colorResource(id = R.color.tikrayColor1))
+            .fillMaxSize()
+    ) {
 
-        Image(painter = painterResource(id = R.drawable.logo_empresa), contentDescription = "Foto logo empresa" , modifier = Modifier.constrainAs(logo){
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(margenSuperior)
-        })
+        // VARIABLES PARA LA COLOCACIÓN DE LOS ELEMENTOS EN EL CONSTRAINT LAYOUT
 
-        Button(onClick = { navegarBoton1(navigationController) },
+        val (logo, titulo, boton1, boton2) = createRefs() // -- REFERENCIAS
+        val margenSuperior = createGuidelineFromTop(0.25f) // MARGEN DE ARRIBA
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        //LOGO IMAGEN PARTE SUPERIOR
+
+        Image(
+            painter = painterResource(id = R.drawable.logo_empresa),
+            contentDescription = "Foto logo empresa",
+            modifier = Modifier.constrainAs(logo) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                top.linkTo(margenSuperior)
+            })
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        // BOTON PARA IR A LA PANTALLA DE REGISTRO
+
+        Button(onClick = { navegarAlRegister(navigationController) },
             Modifier
                 .fillMaxWidth()
                 .padding(start = 75.dp, end = 75.dp)
                 .constrainAs(boton1) {
                     top.linkTo(logo.bottom, margin = 100.dp)
                 }) {
-            Text(text = "SIGN UP", )
-
+            Text(text = "SIGN UP")
         }
-        Button(onClick = { navegarBoton2(navigationController) },
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        // BOTON PARA IR A LA PANTALLA DE LOGIN
+
+        Button(onClick = { navegarAlLogin(navigationController) },
             Modifier
                 .fillMaxWidth()
                 .padding(start = 75.dp, end = 75.dp)
                 .constrainAs(boton2) {
                     top.linkTo(boton1.bottom, margin = 5.dp)
                 }) {
-            Text(text = "LOGIN", )
+            Text(text = "LOGIN")
 
         }
 
-
-
-
-
-
-
-
-
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     }
-
 }
 
 
 
+// PREVIEW
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun Preview() {
     ConstraintLayout(modifier = Modifier.background(colorResource(id = R.color.tikrayColor1))) {
+        ScreenPrincipal(rememberNavController())
 
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }
