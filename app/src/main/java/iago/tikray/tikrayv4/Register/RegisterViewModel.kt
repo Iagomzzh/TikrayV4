@@ -14,14 +14,20 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.firestore.FirebaseFirestore
+import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.AlertDialogExample
+
+import com.google.firebase.auth.FirebaseAuth
+import java.io.IOError
+import java.io.IOException
 import java.util.Calendar
+import javax.inject.Inject
 
-
-class RegisterViewModel : ViewModel() {
+@HiltViewModel
+class RegisterViewModel @Inject constructor() : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
-
 
 
     //nombre
@@ -76,105 +82,144 @@ class RegisterViewModel : ViewModel() {
     private val _estadoIcono = MutableLiveData<Boolean>()
     val estadoIcono: LiveData<Boolean> = _estadoIcono
 
+    private val _resultadoRegistro = MutableLiveData<AuthResult>()
+    val  resultadoRegistro: LiveData<AuthResult> = _resultadoRegistro
+
+    private val auth = FirebaseAuth.getInstance()
+
+    // Register correcto
+
+    private val _goToNext = MutableLiveData<Int>()
+    val goToNext: LiveData<Int> = _goToNext
+
     // Estado del registro
 
-      fun registro(): Boolean {
-        val registro:Boolean = register(correo = _correo.value.toString(), passwd = contrasenya.value.toString() )
-        Log.d("a", registro.toString())
-        return registro
+    /*      fun registro(): Boolean {
+            val registro:Boolean = register(correo = _correo.value.toString(), passwd = contrasenya.value.toString() )
+            Log.d("a", registro.toString())
+            return registro
+        }*/
+
+
+    fun register(username: String, password: String) {
+        auth.createUserWithEmailAndPassword(username, password)
+            .addOnCompleteListener { task ->
+                try {
+                    if (task.isSuccessful) {
+                        _goToNext.value = 1
+                        Log.d("Chivato Registro", "Usuario creado ${task.result} ${_goToNext.value}")
+                    } else {
+                        _goToNext.value = 2
+                        Log.d(
+                            "Chivato Registro",
+                            "Error creating user: ${task.result} ${_goToNext.value}"
+                        )
+                    }
+                    //modifiyProcessing()
+
+
+                }
+                catch (e:Exception) {
+                    Log.d("catch", "catch,  $e")
+
+
+                }
+
+
+
+
+            }
 
     }
 
 
-
-
-
-    fun calcularProgreso(progreso: String): Float {
-        val numeroLenght = progreso.length
-        return when (numeroLenght) {
-            in 1..2 -> 0.1f
-            in 3..5 -> 0.4f
-            in 6..7 -> 0.6f
-            in 8..10 -> 0.8f
-            in 11..1000 -> 1f
-            else -> 0f
-
-        }
-
-
-    }
-
-    fun mostrarBarraProgressBar(contrasenya: String): Color {
-        val numeroLenght = contrasenya.length
-        return if (numeroLenght == 0) {
-            Color.White
-        } else {
-            Color.White
-        }
-
+fun calcularProgreso(progreso: String): Float {
+    val numeroLenght = progreso.length
+    return when (numeroLenght) {
+        in 1..2 -> 0.1f
+        in 3..5 -> 0.4f
+        in 6..7 -> 0.6f
+        in 8..10 -> 0.8f
+        in 11..1000 -> 1f
+        else -> 0f
 
     }
 
 
-    fun colorProgressBar(contrasenya: String): Color {
-        return when (contrasenya.length) {
-            in 1..6 -> Color.Red
-            in 7..10 -> Color.Yellow
-            else -> Color.Green
+}
 
-        }
-    }
-
-    fun contrasenyasCoinciden(contrasenya: String, confirmarContrasenya: String): Color {
-        return if (contrasenya.isEmpty() || confirmarContrasenya.isEmpty() || contrasenya == confirmarContrasenya) Color.Transparent else Color.Red
-
-    }
-
-    fun iconoPassword(iconoEstado: Boolean) {
-        _estadoIcono.value = !iconoEstado
-
-
+fun mostrarBarraProgressBar(contrasenya: String): Color {
+    val numeroLenght = contrasenya.length
+    return if (numeroLenght == 0) {
+        Color.White
+    } else {
+        Color.White
     }
 
 
-    fun elegirIcono(iconoEstado: Boolean): ImageVector {
-        val icono = if (iconoEstado) {
-            Icons.Rounded.Visibility
-        } else {
-            Icons.Rounded.VisibilityOff
-        }
-        return icono
-    }
+}
 
 
-    fun mostrarPassword(estado: Boolean): VisualTransformation {
-        if (!estado) {
-            return PasswordVisualTransformation()
-
-        } else {
-
-            return VisualTransformation.None
-
-
-        }
+fun colorProgressBar(contrasenya: String): Color {
+    return when (contrasenya.length) {
+        in 1..6 -> Color.Red
+        in 7..10 -> Color.Yellow
+        else -> Color.Green
 
     }
+}
 
-    fun botonGuardar() {
-        val calendar = Calendar.getInstance()
-        val dia = calendar.get(Calendar.DAY_OF_MONTH)
-        val mes = calendar.get(Calendar.MONTH) + 1 // Suma 1 porque los meses en Calendar van de 0 a 11
-        val año = calendar.get(Calendar.YEAR)
+fun contrasenyasCoinciden(contrasenya: String, confirmarContrasenya: String): Color {
+    return if (contrasenya.isEmpty() || confirmarContrasenya.isEmpty() || contrasenya == confirmarContrasenya) Color.Transparent else Color.Red
 
-        db.collection("users").document(correo.value.toString()).set(
-            hashMapOf("correo" to correo,
-                "Nombre" to name,
-                "fecha" to "$dia/$mes/$año")
+}
+
+fun iconoPassword(iconoEstado: Boolean) {
+    _estadoIcono.value = !iconoEstado
+
+
+}
+
+
+fun elegirIcono(iconoEstado: Boolean): ImageVector {
+    val icono = if (iconoEstado) {
+        Icons.Rounded.Visibility
+    } else {
+        Icons.Rounded.VisibilityOff
+    }
+    return icono
+}
+
+
+fun mostrarPassword(estado: Boolean): VisualTransformation {
+    if (!estado) {
+        return PasswordVisualTransformation()
+
+    } else {
+
+        return VisualTransformation.None
+
+
+    }
+
+}
+
+fun botonGuardar() {
+    val calendar = Calendar.getInstance()
+    val dia = calendar.get(Calendar.DAY_OF_MONTH)
+    val mes =
+        calendar.get(Calendar.MONTH) + 1 // Suma 1 porque los meses en Calendar van de 0 a 11
+    val año = calendar.get(Calendar.YEAR)
+
+    db.collection("users").document(correo.value.toString()).set(
+        hashMapOf(
+            "correo" to correo,
+            "Nombre" to name,
+            "fecha" to "$dia/$mes/$año"
         )
+    )
 
-    }
-
-
+}
 
 
 }

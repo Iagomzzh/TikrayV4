@@ -1,5 +1,6 @@
 package iago.tikray.tikrayv4.Register
 
+import android.widget.Toast
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
@@ -35,9 +36,9 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import iago.tikray.tikrayv4.PaginaPrincipal.navegarBoton2
 import iago.tikray.tikrayv4.R
-
 @Composable
 fun Register(navigationController: NavHostController, registerViewModel: RegisterViewModel) {
     ConstraintLayout(
@@ -56,6 +57,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
         val contrasenya: String by registerViewModel.contrasenya.observeAsState(initial = "")
         val confirmarContrasenya by registerViewModel.confirmarContrasenya.observeAsState(initial = "")
         val estadoIcono by registerViewModel.estadoIcono.observeAsState(false)
+        val goNext by registerViewModel.goToNext.observeAsState(0)
 
 
         //LOGO
@@ -184,6 +186,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             label = { Text(text = "Confirmar contraseña") },
             colors = Colorss(),
             maxLines = 1,
+
             singleLine = true,
             visualTransformation = registerViewModel.mostrarPassword(estadoIcono),
             modifier = Modifier.constrainAs(textFIeldConfirmarContrasenya) {
@@ -211,9 +214,13 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
             })
 
 
+
         Button(
             onClick = {
-                registerViewModel.registro()
+                registerViewModel.register(correo, contrasenya)
+                if (goNext == 1) {
+
+                }
                       },
             colors = colorsButton(),
             modifier = Modifier

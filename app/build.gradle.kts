@@ -98,8 +98,8 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
 
     //Hilt
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.41")
+    kapt("com.google.dagger:hilt-android-compiler:2.41")
 
 
 }

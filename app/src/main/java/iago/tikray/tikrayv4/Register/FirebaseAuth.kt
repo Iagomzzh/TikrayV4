@@ -14,21 +14,17 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.SignInMethodQueryResult
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
+import javax.inject.Inject
+
+class FirebaseAuth @Inject constructor() {
+    val auth = FirebaseAuth.getInstance()
 
 
-val auth = FirebaseAuth.getInstance()
+    var estado: Boolean = false
 
-
-
-
-
-var estado: Boolean = false
-
- fun register(correo: String, passwd: String, ): FirebaseUser? {
-    return auth.createUserWithEmailAndPassword(correo, passwd).await().user
-
-
-
+   fun register(correo: String, passwd: String): Boolean {
+        return auth.createUserWithEmailAndPassword(correo, passwd).isSuccessful
+    }
 }
 
 

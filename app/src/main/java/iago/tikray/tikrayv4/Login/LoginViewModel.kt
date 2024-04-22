@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.Navegacion.Ruta
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+@HiltViewModel
+class LoginViewModel @Inject constructor() : ViewModel() {
 
     // Navegación
 
