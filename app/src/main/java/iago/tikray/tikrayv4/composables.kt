@@ -5,12 +5,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
+import com.google.firebase.auth.AuthResult
 
 // AlertDialogs
 
 @Composable
 fun AlertDialogExample(
-    show: LiveData<Boolean>,
     dismiss: () -> Unit,
     confirm: () -> Unit,
     textTitle: String,

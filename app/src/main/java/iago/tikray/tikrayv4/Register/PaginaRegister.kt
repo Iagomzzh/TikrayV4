@@ -1,13 +1,6 @@
 package iago.tikray.tikrayv4.Register
 
-import android.widget.Toast
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,7 +17,6 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -36,8 +28,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint
-import iago.tikray.tikrayv4.PaginaPrincipal.navegarBoton2
 import iago.tikray.tikrayv4.R
 @Composable
 fun Register(navigationController: NavHostController, registerViewModel: RegisterViewModel) {
@@ -45,7 +35,8 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.tikrayColor1))
-    ) {
+    )
+    {
 
         // Definimos las referencias para poder colocar los elementos
         val (logo, titulo, textFieldNombre, textFieldCorreo, textFieldContrasenya, progressBar, textFIeldConfirmarContrasenya, textoContrasenyasCoinciden, boton1) = createRefs()
@@ -58,6 +49,8 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
         val confirmarContrasenya by registerViewModel.confirmarContrasenya.observeAsState(initial = "")
         val estadoIcono by registerViewModel.estadoIcono.observeAsState(false)
         val goNext by registerViewModel.goToNext.observeAsState(0)
+        val registerEstado by registerViewModel.resultadoRegistro.observeAsState()
+        registerViewModel.DialogoRegister(goNext)
 
 
         //LOGO
@@ -218,10 +211,7 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
         Button(
             onClick = {
                 registerViewModel.register(correo, contrasenya)
-                if (goNext == 1) {
-
-                }
-                      },
+            },
             colors = colorsButton(),
             modifier = Modifier
                 .fillMaxWidth()
@@ -237,6 +227,8 @@ fun Register(navigationController: NavHostController, registerViewModel: Registe
 
 
         }
+
+
     }
 
 }
@@ -261,6 +253,8 @@ fun Colorss(): TextFieldColors {
         )
     return colors
 }
+
+
 
 
 @Composable
