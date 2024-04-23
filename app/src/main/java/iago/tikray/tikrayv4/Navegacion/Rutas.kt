@@ -8,6 +8,8 @@ sealed class Ruta(val route:String) {
     object PaginaLogin:Ruta("PaginaLogin")
     object  PaginaRecuperarContrasenya:Ruta("RecuperarPassword")
 
+    object  PaginaSplash:Ruta("PantallaSplash")
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

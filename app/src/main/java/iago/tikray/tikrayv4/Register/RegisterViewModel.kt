@@ -126,6 +126,9 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                             "Chivato Registro",
                             "Usuario creado ${task.result} ${_goToNext.value}"
                         )
+
+
+
                     } else {
                         _goToNext.value = 2
 

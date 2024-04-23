@@ -47,7 +47,15 @@ fun ScreenLogin(navigationController: NavHostController, loginViewModel: LoginVi
         val correo: String by loginViewModel.email.observeAsState(initial = "")
         val passwrd: String by loginViewModel.password.observeAsState(initial = "")
 
+        val goNext by loginViewModel.goToNextLogin.observeAsState(0)
+
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+        // FUNCIÓN PARA QUE EL DIALOG ALERT APAREZCA DEPENDIENDO DE SI EL LOGIN HA SIDO SATISFACTORIO O NO
+
+        loginViewModel.DialogoLogin(goNext)
+
 
         //IMAGEN LOGO PARTE SUPERIOR
         Image(
@@ -111,7 +119,7 @@ fun ScreenLogin(navigationController: NavHostController, loginViewModel: LoginVi
         // BOTON PARA HACER EL LOGIN
 
         Button(
-            onClick = { /*TODO*/ },
+            onClick = { loginViewModel.login()},
             colors = colorsButton(),
             modifier = Modifier
                 .fillMaxWidth()

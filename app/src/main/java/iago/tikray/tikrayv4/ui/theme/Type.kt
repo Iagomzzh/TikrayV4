@@ -27,7 +27,7 @@ val arvo = FontFamily(
 val Typography = Typography(
 
     bodyLarge = TextStyle(
-        fontFamily = arvo,
+        fontFamily = tituloTikray,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,

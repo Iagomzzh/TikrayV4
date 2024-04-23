@@ -18,6 +18,7 @@ import iago.tikray.tikrayv4.Register.Register
 import iago.tikray.tikrayv4.Register.RegisterViewModel
 import iago.tikray.tikrayv4.PaginaPrincipal.ScreenPrincipal
 import iago.tikray.tikrayv4.RecuperarContrasenya.PaginaContrasenyaOlvidada
+import iago.tikray.tikrayv4.Splash.Splash
 import iago.tikray.tikrayv4.ui.theme.TikrayV4Theme
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -32,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navigationController = rememberNavController()
 
-                    NavHost(navController = navigationController, startDestination = Ruta.PaginaPrincipal.route  ) {
+                    NavHost(navController = navigationController, startDestination = Ruta.PaginaPrincipal.route) {
 
                         // RUTAS PARA LA NAVEGACION
 
@@ -40,6 +41,7 @@ class MainActivity : ComponentActivity() {
                         composable(Ruta.PaginaRegister.route) { Register( registerViewModel) }
                         composable(Ruta.PaginaLogin.route){ ScreenLogin(navigationController, loginViewModel)}
                         composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada()}
+                        composable(Ruta.PaginaSplash.route){ Splash()}
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
