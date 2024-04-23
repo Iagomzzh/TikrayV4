@@ -33,7 +33,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     val navigationController = rememberNavController()
 
-                    NavHost(navController = navigationController, startDestination = Ruta.PaginaPrincipal.route) {
+                    NavHost(navController = navigationController, startDestination = Ruta.PaginaSplash.route) {
 
                         // RUTAS PARA LA NAVEGACION
 
@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                         composable(Ruta.PaginaRegister.route) { Register( registerViewModel) }
                         composable(Ruta.PaginaLogin.route){ ScreenLogin(navigationController, loginViewModel)}
                         composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada()}
-                        composable(Ruta.PaginaSplash.route){ Splash()}
+                        composable(Ruta.PaginaSplash.route){ Splash(navigationController)}
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }

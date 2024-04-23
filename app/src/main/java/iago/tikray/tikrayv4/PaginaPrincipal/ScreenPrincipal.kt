@@ -107,11 +107,8 @@ fun ScreenPrincipal(navigationController: NavHostController) {
 
 
 
-        // TEMPORAL
 
-        Button(onClick = { navigationController.navigate(Ruta.PaginaSplash.route) }) {
 
-        }
     }
 }
 
