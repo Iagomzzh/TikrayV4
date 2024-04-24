@@ -31,7 +31,6 @@ import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 
-class SplashViewModel @Inject con
 @Composable
 fun Splash(navigationController: NavHostController) {
     val customTextStyle = TextStyle(
