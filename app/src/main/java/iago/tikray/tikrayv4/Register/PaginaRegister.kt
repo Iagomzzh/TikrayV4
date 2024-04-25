@@ -240,6 +240,9 @@ fun Colorss(): TextFieldColors {
         focusedTextColor = Color.White,
         unfocusedTextColor = Color.White,
         cursorColor = Color.Transparent,
+        disabledBorderColor = Color.White,
+        disabledTextColor = Color.White,
+        disabledLabelColor = Color.White
 
         )
     return colors

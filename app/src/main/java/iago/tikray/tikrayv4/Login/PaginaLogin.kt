@@ -40,6 +40,7 @@ fun ScreenLogin(navigationController: NavHostController, loginViewModel: LoginVi
         val (logo, textFieldCorreo, textFieldPassword, boton, passwordOlvidada) = createRefs()
         val margenSuperior = createGuidelineFromTop(0.25f)
 
+
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
         // VARIABLES PARA EL LOGIN
@@ -119,7 +120,7 @@ fun ScreenLogin(navigationController: NavHostController, loginViewModel: LoginVi
         // BOTON PARA HACER EL LOGIN
 
         Button(
-            onClick = { loginViewModel.login()},
+            onClick = { loginViewModel.login(navigationController)},
             colors = colorsButton(),
             modifier = Modifier
                 .fillMaxWidth()

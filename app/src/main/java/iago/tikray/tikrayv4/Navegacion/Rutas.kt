@@ -10,6 +10,10 @@ sealed class Ruta(val route:String) {
 
     object  PaginaSplash:Ruta("PantallaSplash")
 
+    object MenuEntrada:Ruta("MenuEntrada")
+
+    object FormularioDeAlta:Ruta("FormularioDeAlta")
+
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 }

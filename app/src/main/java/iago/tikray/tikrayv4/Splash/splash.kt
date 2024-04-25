@@ -25,6 +25,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.EntryPoint
+import iago.tikray.tikrayv4.Firebase.AuthService
 import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.R
 import kotlinx.coroutines.delay
@@ -32,7 +35,7 @@ import javax.inject.Inject
 
 
 @Composable
-fun Splash(navigationController: NavHostController) {
+fun Splash(navigationController: NavHostController, splashViewModel: SplashViewModel) {
     val customTextStyle = TextStyle(
         fontFamily = FontFamily(
             Font(R.font.kodemono_semibold, FontWeight.Bold),
@@ -86,7 +89,8 @@ fun Splash(navigationController: NavHostController) {
         if (nombreArchivo == 100){
             LaunchedEffect(key1 = null) {
                 delay(40)
-                navigationController.navigate(Ruta.PaginaPrincipal.route)
+                splashViewModel.checkDestination(navigationController)
+
 
                 
             }
@@ -106,6 +110,6 @@ fun getResourceIdForDrawable(progreso: Int): Int {
 @Preview
 @Composable
 private fun Preview() {
-    Splash(rememberNavController())
+    Splash(rememberNavController(), SplashViewModel(AuthService(FirebaseAuth.getInstance())))
 
 }

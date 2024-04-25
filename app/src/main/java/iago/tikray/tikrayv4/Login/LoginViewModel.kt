@@ -59,13 +59,14 @@ class LoginViewModel @Inject constructor() : ViewModel() {
 
     // FUNCION PARA HACER EL LOGIN
 
-    fun login() {
+    fun login(navigationController: NavController) {
         auth.signInWithEmailAndPassword(_email.value.toString(), _password.value.toString())
 
             .addOnCompleteListener { task ->
                 try {
                     if (task.isSuccessful) {
                         _goToNextLogin.value = 1
+                        navigationController.navigate(Ruta.MenuEntrada.route)
 
                         Log.d(
                             "Chivato Login",
@@ -141,6 +142,9 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         _email.value = ""
         _password.value = ""
     }
+
+
+
 }
 
 // NAVEGACION HACIA "HAS OLVIDADO LA CONTRASENYA
