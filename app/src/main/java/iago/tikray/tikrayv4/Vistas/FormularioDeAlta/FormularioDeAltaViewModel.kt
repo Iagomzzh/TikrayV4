@@ -2,9 +2,7 @@ package iago.tikray.tikrayv4.Vistas.FormularioDeAlta
 
 import android.app.TimePickerDialog
 import android.content.Context
-import android.net.Uri
 import android.os.Build
-import androidx.activity.result.ActivityResultLauncher
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,13 +23,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavHostController
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import iago.tikray.tikrayv4.Navegacion.MainActivity
 import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.Vistas.Register.Colorss1
 import iago.tikray.tikrayv4.Vistas.Register.Colorss2
@@ -59,10 +53,7 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
     val numTelefono: LiveData<String> = _numTelefono
 
 
-    fun cambiar(horario: Boolean) {
-        _estadoHorario.value = horario
 
-    }
 
     fun cambiarTexto(texto: String) {
         _selectedText.value = texto

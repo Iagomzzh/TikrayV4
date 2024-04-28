@@ -125,7 +125,7 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
                 when (datoQueRecorrer) {
                     "NombreCompleto" -> _nombreCompletoDB.value = nombres
                     "address" -> _addressDB.value = nombres
-                    "puestoTrabajo" -> _puestoTrabajoDB.value = nombres
+                    "PuestoTrabajo" -> _puestoTrabajoDB.value = nombres
                     "horaFinal" -> _horaFinalDB.value = nombres
                     "horaInicio" -> _horaInicioDB.value = nombres
                     "telefono" -> _telefonoDB.value = nombres

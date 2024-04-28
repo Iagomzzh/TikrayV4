@@ -58,7 +58,7 @@ class MainActivity:ComponentActivity() {
 
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     menuEntradaViewModel.imprimirInformacion("NombreCompleto")
-                    menuEntradaViewModel.imprimirInformacion("puestoTrabajo")
+                    menuEntradaViewModel.imprimirInformacion("PuestoTrabajo")
                     menuEntradaViewModel.imprimirInformacion("address")
                     menuEntradaViewModel.imprimirInformacion("horaFinal")
                     menuEntradaViewModel.imprimirInformacion("horaInicio")
@@ -77,7 +77,7 @@ class MainActivity:ComponentActivity() {
                         composable(Ruta.PaginaLogin.route){ ScreenLogin(navigationController, loginViewModel) }
                         composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada() }
                         composable(Ruta.PaginaSplash.route){ Splash(navigationController, splashViewModel) }
-                        composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel,navigationController ) }
+                        composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel ) }
                         composable(Ruta.FormularioDeAlta.route){ Formulario(formularioDeAltaViewModel, navigationController) }
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
