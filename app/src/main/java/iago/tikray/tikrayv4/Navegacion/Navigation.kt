@@ -73,11 +73,11 @@ class MainActivity:ComponentActivity() {
                         // RUTAS PARA LA NAVEGACION
 
                         composable(Ruta.PaginaPrincipal.route) { ScreenPrincipal(navigationController) }
-                        composable(Ruta.PaginaRegister.route) { Register( registerViewModel) }
+                        composable(Ruta.PaginaRegister.route) { Register( registerViewModel, navigationController) }
                         composable(Ruta.PaginaLogin.route){ ScreenLogin(navigationController, loginViewModel) }
                         composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada() }
                         composable(Ruta.PaginaSplash.route){ Splash(navigationController, splashViewModel) }
-                        composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel ) }
+                        composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel, navigationController ) }
                         composable(Ruta.FormularioDeAlta.route){ Formulario(formularioDeAltaViewModel, navigationController) }
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

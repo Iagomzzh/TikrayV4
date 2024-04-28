@@ -27,10 +27,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import iago.tikray.tikrayv4.R
 
 @Composable
-fun Register(registerViewModel: RegisterViewModel) {
+fun Register(registerViewModel: RegisterViewModel, navigationController: NavHostController) {
     ConstraintLayout(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.tikrayColor1)))
@@ -211,6 +213,7 @@ fun Register(registerViewModel: RegisterViewModel) {
         Button(
             onClick = {
                 registerViewModel.register(correo, contrasenya)
+                registerViewModel.navegarAlFormulario(navigationController)
             },
             colors = colorsButton(),
             modifier = Modifier
@@ -312,7 +315,7 @@ fun colorsButton(): ButtonColors {
 @Preview(showSystemUi = true)
 @Composable
 private fun Preview() {
-    Register(RegisterViewModel())
+    Register(RegisterViewModel(), rememberNavController())
 
 }
 

@@ -17,10 +17,12 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.AlertDialogExample
 
 import com.google.firebase.auth.FirebaseAuth
+import iago.tikray.tikrayv4.Navegacion.Ruta
 import javax.inject.Inject
 
 @HiltViewModel
@@ -123,7 +125,10 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                             "Chivato Registro",
                             "Usuario creado ${task.result} ${_goToNext.value}"
 
+
+
                         )
+
 
 
 
@@ -295,8 +300,16 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
         }
 
 
+
+
+
     }
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    fun navegarAlFormulario(navigationController: NavController): () -> Unit {
+        val nav: Any = navigationController.navigate(Ruta.FormularioDeAlta.route)
+        return { nav }
+    }
 
 
 

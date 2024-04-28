@@ -3,14 +3,16 @@ package iago.tikray.tikrayv4.Vistas.MenuEntrada
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import iago.tikray.tikrayv4.Navegacion.Ruta
 import javax.inject.Inject
 
 
 class MenuEntradaViewModel @Inject constructor() : ViewModel() {
     private val auth = FirebaseAuth.getInstance()
-    fun logOut() {
+    fun logOut(navigationController: NavHostController) {
         auth.signOut()
     }
 
@@ -142,6 +144,9 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
 
 
     }
+
+
+
 
 
 }
