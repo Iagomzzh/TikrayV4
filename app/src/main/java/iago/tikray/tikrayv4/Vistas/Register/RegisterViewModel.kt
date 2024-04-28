@@ -8,7 +8,6 @@ import androidx.compose.material.icons.rounded.VisibilityOff
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
@@ -18,12 +17,10 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.navigation.NavHostController
 import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.AlertDialogExample
 
 import com.google.firebase.auth.FirebaseAuth
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -125,6 +122,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                         Log.d(
                             "Chivato Registro",
                             "Usuario creado ${task.result} ${_goToNext.value}"
+
                         )
 
 

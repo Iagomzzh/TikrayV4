@@ -224,9 +224,9 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
         val db = FirebaseFirestore.getInstance()
 
         val userEmail = firebaseAuth.currentUser?.email
-        val nombreCompleto = formularioDeAltaViewModel.nombreCompleto?.value
-        val numTelefono = formularioDeAltaViewModel.numTelefono?.value
-        val selectedText = formularioDeAltaViewModel.selectedText?.value
+        val nombreCompleto = formularioDeAltaViewModel.nombreCompleto.value
+        val numTelefono = formularioDeAltaViewModel.numTelefono.value
+        val selectedText = formularioDeAltaViewModel.selectedText.value
 
         val horaInicio = formularioDeAltaViewModel.horaSelect.value?.let { hour ->
             formularioDeAltaViewModel.minSelect.value?.let { minute ->
@@ -249,6 +249,7 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
                     "horaInicio" to horaInicio.toString(),
                     "horaFinal" to horaFinal.toString(),
                     "PuestoTrabajo" to selectedText
+
                 )
             )
 
