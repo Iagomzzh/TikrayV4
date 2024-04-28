@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.Login
+package iago.tikray.tikrayv4.Vistas.Login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -24,9 +24,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import iago.tikray.tikrayv4.R
-import iago.tikray.tikrayv4.Register.colorsButton
-import iago.tikray.tikrayv4.Register.Colorss
-import iago.tikray.tikrayv4.Register.RegisterViewModel
+import iago.tikray.tikrayv4.Vistas.Register.colorsButton
+import iago.tikray.tikrayv4.Vistas.Register.Colorss
+import iago.tikray.tikrayv4.Vistas.Register.RegisterViewModel
 
 
 @Composable

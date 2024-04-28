@@ -1,5 +1,5 @@
 
-package iago.tikray.tikrayv4.Register
+package iago.tikray.tikrayv4.Vistas.Register
 
 import android.util.Log
 import androidx.compose.material.icons.Icons
@@ -279,12 +279,15 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
                 dismiss = {
                     _goToNext.value = 0
                     a = 1
+                    restaurarDatosRegister()
 
                 },
                 confirm = { _goToNext.value = 0
-                    a = 1 },
+                    a = 1
+                          restaurarDatosRegister()},
                 textTitle = "Registro Completado",
                 textBody = "Tu usuario ha sido registrado"
+
             )
 
 

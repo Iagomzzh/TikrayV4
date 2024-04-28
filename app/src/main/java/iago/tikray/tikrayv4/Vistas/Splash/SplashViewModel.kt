@@ -1,7 +1,11 @@
-package iago.tikray.tikrayv4.Splash
+package iago.tikray.tikrayv4.Vistas.Splash
 
+import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
+import androidx.media3.common.util.Log
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavHostController
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.Firebase.AuthService
 import iago.tikray.tikrayv4.Navegacion.Ruta
@@ -18,7 +22,10 @@ class SplashViewModel @Inject constructor(private val authService: AuthService):
     fun checkDestination(navigationController: NavHostController) {
         val isUserLogged:Boolean = isUSerLogged()
         if(isUserLogged) {
-            navigationController.navigate(Ruta.PaginaPrincipal.route)
+            navigationController.navigate(Ruta.MenuEntrada.route)
+
+
+
 
 
 
@@ -29,4 +36,9 @@ class SplashViewModel @Inject constructor(private val authService: AuthService):
 
         }
     }
+
+
+
+
+
 }

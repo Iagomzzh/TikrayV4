@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.Splash
+package iago.tikray.tikrayv4.Vistas.Splash
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

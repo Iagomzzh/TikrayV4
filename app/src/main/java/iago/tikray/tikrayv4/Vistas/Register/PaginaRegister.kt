@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.Register
+package iago.tikray.tikrayv4.Vistas.Register
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -29,10 +29,15 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.google.firebase.firestore.FirebaseFirestore
 import iago.tikray.tikrayv4.R
+import iago.tikray.tikrayv4.Vistas.MenuEntrada.MenuEntradaViewModel
+
 @Composable
 fun Register(registerViewModel: RegisterViewModel) {
-    ConstraintLayout(modifier = Modifier.fillMaxSize().background(colorResource(id = R.color.tikrayColor1)))
+    ConstraintLayout(modifier = Modifier
+        .fillMaxSize()
+        .background(colorResource(id = R.color.tikrayColor1)))
     {
 
         // DEFINIMOS LAS REFERENCIAS PARA PODER COLOCARLAS DE LA FORMA QUE QUERAMOS
@@ -246,9 +251,55 @@ fun Colorss(): TextFieldColors {
 
         )
     return colors
+
+
+
 }
 
+@SuppressLint("ComposableNaming")
 @Composable
+fun Colorss1(): TextFieldColors {
+    val colors = OutlinedTextFieldDefaults.colors(
+        unfocusedBorderColor = Color.White,
+        focusedBorderColor = Color.Gray,
+        focusedTextColor = Color.White,
+        unfocusedTextColor = Color.White,
+        cursorColor = Color.Transparent,
+        disabledBorderColor = Color.White,
+        disabledTextColor = Color.White,
+        disabledLabelColor = Color.White,
+        unfocusedLabelColor = colorResource(id = R.color.noTanBlanco),
+
+
+    )
+    return colors
+
+
+}
+
+@SuppressLint("ComposableNaming")
+@Composable
+fun Colorss2(): TextFieldColors {
+    val colors = OutlinedTextFieldDefaults.colors(
+        unfocusedBorderColor = Color.White,
+        focusedBorderColor = Color.Gray,
+        focusedTextColor = colorResource(id = R.color.noTanBlanco),
+        unfocusedTextColor = colorResource(id = R.color.noTanBlanco),
+        cursorColor = Color.Transparent,
+        disabledBorderColor = Color.White,
+        disabledTextColor = Color.White,
+        disabledLabelColor = Color.White,
+        unfocusedLabelColor = colorResource(id = R.color.noTanBlanco),
+
+
+        )
+    return colors
+
+
+}
+
+@SuppressLint("ComposableNaming")
+    @Composable
 fun colorsButton(): ButtonColors {
     val colors = ButtonDefaults.buttonColors(
         contentColor = colorResource(id = R.color.tikrayColor1),

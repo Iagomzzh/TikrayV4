@@ -1,15 +1,17 @@
-package iago.tikray.tikrayv4.FormularioDeAlta
+package iago.tikray.tikrayv4.Vistas.FormularioDeAlta
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -22,23 +24,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.modifier.modifierLocalProvider
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseAuth
+import iago.tikray.tikrayv4.Navegacion.MainActivity
 import iago.tikray.tikrayv4.R
-import iago.tikray.tikrayv4.Register.Colorss
+import iago.tikray.tikrayv4.Vistas.Register.Colorss
+import iago.tikray.tikrayv4.Vistas.Register.Colorss1
+import iago.tikray.tikrayv4.Vistas.Register.colorsButton
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel) {
+fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostController: NavHostController) {
+
+
+
+
 
 
     //Instancias de variables
@@ -47,6 +54,10 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel) {
 
     val hora1: Int by formularioDeAltaViewModel.horaSelect1.observeAsState(initial = 0)
     val minutos1: Int by formularioDeAltaViewModel.minSelect1.observeAsState(initial = 0)
+
+
+    val nombreCompleto:String by formularioDeAltaViewModel.nombreCompleto.observeAsState(initial = "")
+    val numTelefono:String by formularioDeAltaViewModel.numTelefono.observeAsState(initial = "")
 
 
     ConstraintLayout(
@@ -67,6 +78,7 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel) {
                 .background(
                     Color.White
                 )
+                .clickable {  }
                 .constrainAs(imagen) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)
@@ -76,10 +88,10 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel) {
                 })
 
         //TEXTFIELD NOMBRE
-        OutlinedTextField(value = "",
-            onValueChange = {},
+        OutlinedTextField(value = nombreCompleto,
+            onValueChange = {formularioDeAltaViewModel.cambiarNombrecompleto(it)},
             label = { Text(text = "Nombre Completo") },
-            colors = Colorss(),
+            colors = Colorss1(),
             maxLines = 1,
             singleLine = true,
             modifier = Modifier.constrainAs(nombre) {
@@ -92,12 +104,17 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel) {
             })
 
 
-        OutlinedTextField(value = "",
-            onValueChange = {},
+        OutlinedTextField(value = numTelefono,
+            onValueChange = { nuevoTelefono ->
+                if (nuevoTelefono.length <= 9) { // Limita a 10 caracteres
+                    formularioDeAltaViewModel.cambiarTelefono(nuevoTelefono)
+                }
+            },
             label = { Text(text = "Teléfono") },
-            colors = Colorss(),
+            colors = Colorss1(),
             maxLines = 1,
             singleLine = true,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone,   ),
             modifier = Modifier.constrainAs(telefono) {
 
                 top.linkTo(nombre.bottom, margin = 10.dp)
@@ -178,13 +195,18 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel) {
 
 
 
-        Button(onClick = {  }, Modifier.constrainAs(botonContinue){
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            top.linkTo(inicioHorario.bottom, margin = 50.dp)
+        Button(onClick = { formularioDeAltaViewModel.guardarDatos(formularioDeAltaViewModel, FirebaseAuth(), navHostController)},
+            Modifier
+                .constrainAs(botonContinue) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    top.linkTo(inicioHorario.bottom, margin = 50.dp)
 
-        }.fillMaxWidth()
-            .padding(start = 75.dp, end = 75.dp))
+                }
+                .fillMaxWidth()
+                .padding(start = 75.dp, end = 75.dp),
+            enabled = formularioDeAltaViewModel.enabledOrDisabled(),
+            colors = colorsButton())
         {
             Text(text = "Continuar")
 
@@ -198,12 +220,12 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel) {
 
 }
 
-@Preview
-@Composable
-private fun Preview() {
-    Formulario(formularioDeAltaViewModel = FormularioDeAltaViewModel())
+fun FirebaseAuth(): FirebaseAuth {
+    return FirebaseAuth.getInstance()
 
 }
+
+
 
 
 

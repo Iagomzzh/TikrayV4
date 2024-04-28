@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.PaginaPrincipal
+package iago.tikray.tikrayv4.Vistas.PaginaPrincipal
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

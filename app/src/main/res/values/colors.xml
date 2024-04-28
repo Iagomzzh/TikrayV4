@@ -8,5 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tikrayColor1">#131245</color>
+    <color name="noTanBlanco">#BFD7D7DD</color>
 
 </resources>

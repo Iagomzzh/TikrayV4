@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.PaginaPrincipal
+package iago.tikray.tikrayv4.Vistas.PaginaPrincipal
 
 import androidx.navigation.NavController
 import iago.tikray.tikrayv4.Navegacion.Ruta

@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.RecuperarContrasenya
+package iago.tikray.tikrayv4.Vistas.RecuperarContrasenya
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,37 +1,41 @@
-package iago.tikray.tikrayv4.FormularioDeAlta
+package iago.tikray.tikrayv4.Vistas.FormularioDeAlta
 
 import android.app.TimePickerDialog
 import android.content.Context
-import androidx.compose.foundation.clickable
+import android.net.Uri
+import android.os.Build
+import androidx.activity.result.ActivityResultLauncher
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavHostController
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.storage
 import dagger.hilt.android.lifecycle.HiltViewModel
-import iago.tikray.tikrayv4.Register.Colorss
-import java.util.Calendar
+import iago.tikray.tikrayv4.Navegacion.MainActivity
+import iago.tikray.tikrayv4.Navegacion.Ruta
+import iago.tikray.tikrayv4.Vistas.Register.Colorss1
+import iago.tikray.tikrayv4.Vistas.Register.Colorss2
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -43,18 +47,16 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
 
 
     private val _selectedText = MutableLiveData<String>()
-    val selectedText: LiveData<String> = _selectedText
+    var selectedText: LiveData<String> = _selectedText
 
     private val _expanded = MutableLiveData<Boolean>()
     val expanded: LiveData<Boolean> = _expanded
 
+    private val _nombreCompleto = MutableLiveData<String>()
+    val nombreCompleto: LiveData<String> = _nombreCompleto
 
-    val opcionesMenuHorario = listOf(
-        "Jornada completa mañana",
-        "Jornada completa tarde",
-        "Media jornada mañana",
-        "Media jornada tarde"
-    )
+    private val _numTelefono = MutableLiveData<String>()
+    val numTelefono: LiveData<String> = _numTelefono
 
 
     fun cambiar(horario: Boolean) {
@@ -86,8 +88,17 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
     private val _minSelect1 = MutableLiveData<Int>()
     val minSelect1: LiveData<Int> = _minSelect1
 
-    private val _selected = MutableLiveData<List<String>>()
-    val selected: LiveData<List<String>> = _selected
+    private val _formularioDeAltaCompletado = MutableLiveData<Boolean>()
+    val formulariodeAltaCompletado:LiveData<Boolean> = _formularioDeAltaCompletado
+
+
+    fun cambiarNombrecompleto(nombre: String) {
+        _nombreCompleto.value = nombre
+    }
+
+    fun cambiarTelefono(telefono: String) {
+        _numTelefono.value = telefono
+    }
 
 
     fun mostrarTimePicker(context: Context) {
@@ -132,9 +143,19 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
 
 
         val listaCargos =
-            listOf("puesto de trabajo", "Administrativo", "Marketing", "Informatico", "Comerical", "Soporte")
+            listOf("Administrativo", "Marketing", "Informatico", "Comerical", "Soporte")
 
-        var selectedText by remember { mutableStateOf(listaCargos[0]) }
+        if (_selectedText.value == null) {
+            _selectedText.value = "Puesto de trabajo"
+        }
+
+
+        val seleccion = if (_selectedText.value.toString() == "Puesto de trabajo") {
+            Colorss2()
+
+        } else {
+            Colorss1()
+        }
 
         Column(
             Modifier
@@ -146,18 +167,20 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
 
                 expanded = expanded,
                 onExpandedChange = { cambiarExpanded(!expanded) }) {
-                OutlinedTextField(value = selectedText, onValueChange = {},
-                    colors = Colorss(),
+                OutlinedTextField(
+                    value = _selectedText.value.toString(), onValueChange = {},
+                    colors = seleccion,
                     modifier = Modifier.menuAnchor(),
                     readOnly = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded,)})
+                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                )
 
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { cambiarExpanded(false) }) {
                     listaCargos.forEachIndexed { index, text ->
                         DropdownMenuItem(text = { Text(text = text) }, onClick = {
-                            selectedText = listaCargos[index]
+                            _selectedText.value = listaCargos[index]
                             cambiarExpanded(false)
                         }, contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding)
 
@@ -172,6 +195,84 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
 
 
     }
+
+    fun enabledOrDisabled(): Boolean {
+        return if (_nombreCompleto.value.toString()
+                .isNotEmpty() && _numTelefono.value.toString().length == 9 && selectedText.value.toString() != "Puesto de trabajo" && horaSelect.value != null && horaSelect1.value != null
+
+        ) {
+            android.util.Log.d("Valor de hora select: ", "${horaSelect.value}")
+            true
+        } else {
+            false
+        }
+
+
+    }
+
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun guardarDatos(
+
+
+    formularioDeAltaViewModel: FormularioDeAltaViewModel,
+        firebaseAuth: FirebaseAuth,
+        navigationController:NavHostController
+    ) {
+
+        val db = FirebaseFirestore.getInstance()
+
+        val userEmail = firebaseAuth.currentUser?.email
+        val nombreCompleto = formularioDeAltaViewModel.nombreCompleto?.value
+        val numTelefono = formularioDeAltaViewModel.numTelefono?.value
+        val selectedText = formularioDeAltaViewModel.selectedText?.value
+
+        val horaInicio = formularioDeAltaViewModel.horaSelect.value?.let { hour ->
+            formularioDeAltaViewModel.minSelect.value?.let { minute ->
+                LocalTime.of(hour, minute)
+            }
+        }
+
+        val horaFinal = formularioDeAltaViewModel.horaSelect1.value?.let { hour ->
+            formularioDeAltaViewModel.minSelect1.value?.let { minute ->
+                LocalTime.of(hour, minute)
+            }
+        }
+
+        if (userEmail != null) {
+            db.collection("usersInformation").document(userEmail).set(
+                hashMapOf(
+                    "NombreCompleto" to nombreCompleto,
+                    "address" to userEmail,
+                    "telefono" to numTelefono,
+                    "horaInicio" to horaInicio.toString(),
+                    "horaFinal" to horaFinal.toString(),
+                    "PuestoTrabajo" to selectedText
+                )
+            )
+
+            navigationController.navigate(Ruta.MenuEntrada.route)
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
@@ -209,3 +310,5 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
 //        }
 //    }
 //}
+
+
