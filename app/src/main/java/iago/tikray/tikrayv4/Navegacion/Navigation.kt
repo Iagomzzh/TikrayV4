@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.Formulario
 import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.FormularioDeAltaViewModel
+import iago.tikray.tikrayv4.Vistas.InformacionCompleta.InformacionEnGrande
 import iago.tikray.tikrayv4.Vistas.Login.LoginViewModel
 import iago.tikray.tikrayv4.Vistas.Login.ScreenLogin
 import iago.tikray.tikrayv4.Vistas.MenuEntrada.MenuEntrada
@@ -79,6 +80,7 @@ class MainActivity:ComponentActivity() {
                         composable(Ruta.PaginaSplash.route){ Splash(navigationController, splashViewModel) }
                         composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel, navigationController ) }
                         composable(Ruta.FormularioDeAlta.route){ Formulario(formularioDeAltaViewModel, navigationController) }
+                        composable(Ruta.MasInformacion.route){ InformacionEnGrande(menuEntradaViewModel )}
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }

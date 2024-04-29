@@ -14,8 +14,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -27,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.R
 
 
@@ -37,13 +36,7 @@ fun MenuEntrada(
     navigationController: NavHostController
 
 
-    ) {
-
-
-
-
-    
-
+) {
 
 
     LazyColumn(
@@ -67,8 +60,7 @@ fun MenuEntrada(
         menuEntradaViewModel.numeroDeEmpleados.value?.let {
             items(it) {
                 EmpleadosReciclyerView(
-                    menuEntradaViewModel = menuEntradaViewModel, it
-
+                    menuEntradaViewModel, navigationController, it
                 )
             }
         }
@@ -86,7 +78,11 @@ fun MenuEntrada(
 
 
 @Composable
-fun EmpleadosReciclyerView(menuEntradaViewModel: MenuEntradaViewModel, i: Int) {
+fun EmpleadosReciclyerView(
+    menuEntradaViewModel: MenuEntradaViewModel,
+    navigationController: NavHostController,
+    i: Int
+) {
     val context = LocalContext.current
 
 
@@ -95,6 +91,7 @@ fun EmpleadosReciclyerView(menuEntradaViewModel: MenuEntradaViewModel, i: Int) {
             .fillMaxWidth()
             .padding(start = 3.dp, end = 3.dp, top = 6.dp, bottom = 6.dp)
             .height(150.dp)
+            .clickable { navigationController.navigate(Ruta.MasInformacion.route) }
 
 
     ) {
@@ -104,9 +101,7 @@ fun EmpleadosReciclyerView(menuEntradaViewModel: MenuEntradaViewModel, i: Int) {
                 .background(colorResource(id = R.color.tikrayColor1))
         ) {
 
-            val sumarParaAvzanzar: Int by menuEntradaViewModel.sumarParaAvanzar.observeAsState(
-                initial = 0
-            )
+
             val (imagen, nombre, telefono, puesto, estado, correo, textoHorario, horario) = createRefs()
             val margenMiddle = createGuidelineFromStart(0.5f)
 
@@ -118,12 +113,22 @@ fun EmpleadosReciclyerView(menuEntradaViewModel: MenuEntradaViewModel, i: Int) {
                     .background(
                         Color.White
                     )
-                    .clickable { menuEntradaViewModel.logOut(NavHostController(context)) }
+                    .clickable { menuEntradaViewModel.logOut(NavHostController(context))
+                        menuEntradaViewModel.cambiarDatos(
+                            menuEntradaViewModel.nombreCompletoDB.value?.get(i) ?: "null",
+                            menuEntradaViewModel.puestoTrabajoDB.value?.get(i) ?: "null",
+                            menuEntradaViewModel.address.value?.get(i) ?: "null",
+                            menuEntradaViewModel.horaInicioDB.value?.get(i) ?: "null",
+                            menuEntradaViewModel.horaFinalDB.value?.get(i) ?: "null",
+                            menuEntradaViewModel.telefonoDB.value?.get(i) ?: "null"
+                        )}
                     .constrainAs(imagen) {
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
                         start.linkTo(parent.start, margin = 8.dp)
                     })
+
+                    val a = i
 
 
             val nombreCompletoDB = menuEntradaViewModel.nombreCompletoDB.value
@@ -137,16 +142,20 @@ fun EmpleadosReciclyerView(menuEntradaViewModel: MenuEntradaViewModel, i: Int) {
 
 
 
+
+
+
+
             Text(
                 text = "${nombreCompletoDB?.get(i)}",
-                style = androidx.compose.ui.text.TextStyle(color = Color.White, fontSize = 19.sp),
+                style = TextStyle(color = Color.White, fontSize = 19.sp),
                 modifier = Modifier.constrainAs(nombre) {
                     start.linkTo(puesto.end, margin = 9.dp)
                     top.linkTo(parent.top, margin = 2.dp)
 
 
                 })
-            Log.d("CHIVATO INDICE", " $sumarParaAvzanzar")
+
 
 
             Text(

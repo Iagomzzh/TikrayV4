@@ -83,6 +83,9 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
     val formulariodeAltaCompletado:LiveData<Boolean> = _formularioDeAltaCompletado
 
 
+
+
+
     fun cambiarNombrecompleto(nombre: String) {
         _nombreCompleto.value = nombre
     }

@@ -38,22 +38,47 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
     private val _telefonoDB = MutableLiveData<List<String>>()
     val telefonoDB: LiveData<List<String>> = _telefonoDB
 
-    private val _sumarParaAvanzar = MutableLiveData<Int>()
-    val sumarParaAvanzar: LiveData<Int> = _sumarParaAvanzar
 
-    fun sumarParaAvanzar() {
-        val numeroDeEmple = _numeroDeEmpleados.value ?: 0
-        val sumarParaAvanzar = _sumarParaAvanzar.value ?: 0
-        val numeroEmpleados = numeroDeEmple - 1
+    private val _nombreCompletoDBS = MutableLiveData<String?>()
+    val nombreCompletoDBS: LiveData<String?> = _nombreCompletoDBS
+
+    private val _numeroDeEmpleadosS = MutableLiveData<String>()
+    val numeroDeEmpleadosS: LiveData<String> = _numeroDeEmpleadosS
+
+    private val _puestoTrabajoDBS = MutableLiveData<String>()
+    val puestoTrabajoDBS: LiveData<String> = _puestoTrabajoDBS
+
+    private val _addressDBS = MutableLiveData<String>()
+    val addressS: LiveData<String> = _addressDBS
+
+    private val _horaInicioDBS = MutableLiveData<String>()
+    val horaInicioDBS: LiveData<String> = _horaInicioDBS
+
+    private val _horaFinalDBS = MutableLiveData<String>()
+    val horaFinalDBS: LiveData<String> = _horaFinalDBS
+
+    private val _telefonoDBS = MutableLiveData<String>()
+    val telefonoDBS: LiveData<List<String>> = _telefonoDB
+
+    private val _sumarParaAvanzar = MutableLiveData<String?>()
+    val sumarParaAvanzar: LiveData<String?> = _sumarParaAvanzar
 
 
+    fun cambiarDatos(
+        nombreCompleto: String,
+        puesto: String,
+        correo: String,
+        horaInicio: String,
+        horaFinal: String,
+        telefono:String
+    ) {
+        _nombreCompletoDBS.value = nombreCompleto
+        _puestoTrabajoDBS.value = puesto
+        _addressDBS.value = correo
+        _horaInicioDBS.value = horaInicio
+        _horaFinalDBS.value = horaFinal
+        _telefonoDBS.value = telefono
 
-
-
-        if (numeroEmpleados > sumarParaAvanzar) {
-
-            _sumarParaAvanzar.value = sumarParaAvanzar.plus(1)
-        }
     }
 
 
@@ -87,10 +112,6 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
 
 
     }
-
-
-    private val _indice = MutableLiveData<Int>()
-    val indice: LiveData<Int> = _indice
 
 
     fun obtenerSizeDeDocument() {
@@ -133,7 +154,6 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
                     "telefono" -> _telefonoDB.value = nombres
 
 
-
                 }
 
 
@@ -144,9 +164,10 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
 
 
     }
-
-
-
-
-
 }
+
+
+
+
+
+
