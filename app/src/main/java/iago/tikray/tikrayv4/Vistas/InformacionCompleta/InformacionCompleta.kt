@@ -13,6 +13,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -22,6 +25,7 @@ import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.R
 import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.FormularioDeAltaViewModel
 import iago.tikray.tikrayv4.Vistas.MenuEntrada.MenuEntradaViewModel
+import iago.tikray.tikrayv4.Vistas.MenuNavegacion
 
 
 @Composable
@@ -33,7 +37,7 @@ fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel) {
             .fillMaxSize()
             .background(colorResource(id = R.color.tikrayColor1))
     ) {
-        val (nombreCompleto, imagen, puesto, estado, horario, telefono, correo) = createRefs()
+        val (nombreCompleto, imagen, puesto, estado, textoHorario, horario, telefono, correo) = createRefs()
         val topMargin = createGuidelineFromTop(0.1f)
         val topMargin1 = createGuidelineFromTop(0.50f)
         val startMargin = createGuidelineFromStart(0.1f)
@@ -64,7 +68,7 @@ fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel) {
         )
 
 
-        Text(text = "${menuEntradaViewModel.nombreCompletoDBS.value}", color = Color.White, fontSize = 18.sp, modifier = Modifier.constrainAs(puesto){
+        Text(text = " ${menuEntradaViewModel.nombreCompletoDBS.value}", style = TextStyle(color = Color.White, fontSize = 18.sp), modifier = Modifier.constrainAs(puesto){
 
             start.linkTo(parent.start)
             end.linkTo(parent.end)
@@ -72,7 +76,7 @@ fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel) {
 
         })
 
-        Text(text = "Correo: ${menuEntradaViewModel.addressS.value}", color = Color.White, modifier = Modifier.constrainAs(correo){
+        Text(text = "${menuEntradaViewModel.addressS.value}", color = Color.White, modifier = Modifier.constrainAs(correo){
             start.linkTo(startMargin)
             bottom.linkTo(topMargin1)
 
@@ -92,10 +96,18 @@ fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel) {
 
         })
 
-        Text(text = "Horario:      Inicio: ${menuEntradaViewModel.horaInicioDBS.value}    Final: ${menuEntradaViewModel.horaFinalDBS.value}", color = Color.White, modifier = Modifier.constrainAs(horario){
+        Text(text = "Horario", color = Color.White, modifier = Modifier.constrainAs(textoHorario){
             start.linkTo(startMargin)
             top.linkTo(estado.bottom, margin = 20.dp)
+
         })
+
+        Text(text = "Inicio: ${menuEntradaViewModel.horaInicioDBS.value} Final: ${menuEntradaViewModel.horaFinalDBS.value}", color = Color.White, modifier = Modifier.constrainAs(horario){
+            start.linkTo(startMargin)
+            top.linkTo(textoHorario.bottom, margin = 10.dp)
+
+        })
+
 
 
 

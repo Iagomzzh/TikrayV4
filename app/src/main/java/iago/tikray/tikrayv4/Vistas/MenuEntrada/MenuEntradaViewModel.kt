@@ -58,7 +58,7 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
     val horaFinalDBS: LiveData<String> = _horaFinalDBS
 
     private val _telefonoDBS = MutableLiveData<String>()
-    val telefonoDBS: LiveData<List<String>> = _telefonoDB
+    val telefonoDBS: LiveData<String> = _telefonoDBS
 
     private val _sumarParaAvanzar = MutableLiveData<String?>()
     val sumarParaAvanzar: LiveData<String?> = _sumarParaAvanzar

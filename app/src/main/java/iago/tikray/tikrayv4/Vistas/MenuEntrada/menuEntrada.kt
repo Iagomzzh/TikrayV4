@@ -21,6 +21,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -39,24 +41,9 @@ fun MenuEntrada(
 ) {
 
 
-    LazyColumn(
-        Modifier
-            .fillMaxSize()
-            .background(colorResource(id = R.color.black))
-    ) {
-
-
+    LazyColumn(Modifier
+            .background(colorResource(id = R.color.black)).fillMaxSize(0.1f)) {
         menuEntradaViewModel.obtenerSizeDeDocument()
-
-
-
-        Log.d(
-            "lista de empleados por nombre",
-            "${menuEntradaViewModel.nombreCompletoDB.value} :::${menuEntradaViewModel.nombreCompletoDB}"
-        )
-
-
-
         menuEntradaViewModel.numeroDeEmpleados.value?.let {
             items(it) {
                 EmpleadosReciclyerView(
@@ -91,7 +78,16 @@ fun EmpleadosReciclyerView(
             .fillMaxWidth()
             .padding(start = 3.dp, end = 3.dp, top = 6.dp, bottom = 6.dp)
             .height(150.dp)
-            .clickable { navigationController.navigate(Ruta.MasInformacion.route) }
+            .clickable { navigationController.navigate(Ruta.MasInformacion.route)
+
+                menuEntradaViewModel.cambiarDatos(
+                    menuEntradaViewModel.nombreCompletoDB.value?.get(i) ?: "null",
+                    menuEntradaViewModel.puestoTrabajoDB.value?.get(i) ?: "null",
+                    menuEntradaViewModel.address.value?.get(i) ?: "null",
+                    menuEntradaViewModel.horaInicioDB.value?.get(i) ?: "null",
+                    menuEntradaViewModel.horaFinalDB.value?.get(i) ?: "null",
+                    menuEntradaViewModel.telefonoDB.value?.get(i) ?: "null"
+                )}
 
 
     ) {
@@ -114,14 +110,7 @@ fun EmpleadosReciclyerView(
                         Color.White
                     )
                     .clickable { menuEntradaViewModel.logOut(NavHostController(context))
-                        menuEntradaViewModel.cambiarDatos(
-                            menuEntradaViewModel.nombreCompletoDB.value?.get(i) ?: "null",
-                            menuEntradaViewModel.puestoTrabajoDB.value?.get(i) ?: "null",
-                            menuEntradaViewModel.address.value?.get(i) ?: "null",
-                            menuEntradaViewModel.horaInicioDB.value?.get(i) ?: "null",
-                            menuEntradaViewModel.horaFinalDB.value?.get(i) ?: "null",
-                            menuEntradaViewModel.telefonoDB.value?.get(i) ?: "null"
-                        )}
+                        }
                     .constrainAs(imagen) {
                         top.linkTo(parent.top)
                         bottom.linkTo(parent.bottom)
@@ -132,8 +121,6 @@ fun EmpleadosReciclyerView(
 
 
             val nombreCompletoDB = menuEntradaViewModel.nombreCompletoDB.value
-            val addressDB = menuEntradaViewModel.address.value
-            val telephoneDB = menuEntradaViewModel.telefonoDB.value
             val horarioInicioDB = menuEntradaViewModel.horaInicioDB.value
             val horarioFinalDB = menuEntradaViewModel.horaFinalDB.value
             val puestoDB = menuEntradaViewModel.puestoTrabajoDB.value
@@ -148,34 +135,14 @@ fun EmpleadosReciclyerView(
 
             Text(
                 text = "${nombreCompletoDB?.get(i)}",
-                style = TextStyle(color = Color.White, fontSize = 19.sp),
+                color = Color.White, fontSize = 19.sp,
                 modifier = Modifier.constrainAs(nombre) {
-                    start.linkTo(puesto.end, margin = 9.dp)
-                    top.linkTo(parent.top, margin = 2.dp)
+                    start.linkTo(imagen.end, margin = 20.dp)
+                    top.linkTo(parent.top)
+                    bottom.linkTo(parent.bottom)
 
 
                 })
-
-
-
-            Text(
-                text = "${addressDB?.get(i)}",
-                color = Color.LightGray,
-                modifier = Modifier.constrainAs(correo) {
-                    start.linkTo(imagen.end, margin = 10.dp)
-                    top.linkTo(nombre.bottom, margin = 25.dp)
-                }
-            )
-
-            Text(
-                text = "${telephoneDB?.get(i)}",
-                color = Color.LightGray,
-                modifier = Modifier.constrainAs(telefono) {
-                    start.linkTo(margenMiddle)
-                    start.linkTo(correo.start)
-                    top.linkTo(correo.bottom, margin = 10.dp)
-                }
-            )
 
             Text(text = "Activo", color = Color.Green, modifier = Modifier.constrainAs(estado) {
                 start.linkTo(imagen.start)
@@ -195,25 +162,8 @@ fun EmpleadosReciclyerView(
 
 
             )
-            Text(
-                text = "HORARIO",
-                style = TextStyle(color = Color.Gray),
-                modifier = Modifier.constrainAs(textoHorario) {
 
-                    end.linkTo(parent.end, margin = 60.dp)
-                    top.linkTo(telefono.top)
 
-                })
-
-            Text(text = "Inicio: ${horarioInicioDB?.get(i)} Final: ${horarioFinalDB?.get(i)} ",
-                style = TextStyle(
-                    Color.Gray
-                ),
-                modifier = Modifier.constrainAs(horario) {
-                    end.linkTo(parent.end, margin = 8.dp)
-                    top.linkTo(textoHorario.bottom, margin = 20.dp)
-                }
-            )
 
 
         }
