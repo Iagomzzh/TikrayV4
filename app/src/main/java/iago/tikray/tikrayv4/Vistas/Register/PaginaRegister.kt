@@ -255,7 +255,6 @@ fun Colorss(): TextFieldColors {
 
 }
 
-@SuppressLint("ComposableNaming")
 @Composable
 fun Colorss1(): TextFieldColors {
     val colors = OutlinedTextFieldDefaults.colors(
@@ -276,7 +275,9 @@ fun Colorss1(): TextFieldColors {
 
 }
 
-@SuppressLint("ComposableNaming")
+
+
+
 @Composable
 fun Colorss2(): TextFieldColors {
     val colors = OutlinedTextFieldDefaults.colors(
@@ -286,6 +287,27 @@ fun Colorss2(): TextFieldColors {
         unfocusedTextColor = colorResource(id = R.color.noTanBlanco),
         cursorColor = Color.Transparent,
         disabledBorderColor = Color.White,
+        disabledTextColor = Color.White,
+        disabledLabelColor = Color.White,
+        unfocusedLabelColor = colorResource(id = R.color.noTanBlanco),
+
+
+        )
+    return colors
+
+
+}
+
+
+@Composable
+fun Colorss3(): TextFieldColors {
+    val colors = OutlinedTextFieldDefaults.colors(
+        unfocusedBorderColor = Color.Transparent,
+        focusedBorderColor = Color.Transparent,
+        focusedTextColor = Color.White,
+        unfocusedTextColor = Color.White,
+        cursorColor = Color.Transparent,
+        disabledBorderColor = Color.Transparent,
         disabledTextColor = Color.White,
         disabledLabelColor = Color.White,
         unfocusedLabelColor = colorResource(id = R.color.noTanBlanco),

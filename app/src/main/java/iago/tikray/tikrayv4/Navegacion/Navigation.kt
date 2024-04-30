@@ -14,6 +14,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import iago.tikray.tikrayv4.Vistas.Ajustes.AjustesPantalla
+import iago.tikray.tikrayv4.Vistas.Ajustes.AjustesViewModel
 import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.Formulario
 import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.FormularioDeAltaViewModel
 import iago.tikray.tikrayv4.Vistas.InformacionCompleta.InformacionEnGrande
@@ -38,6 +40,8 @@ class MainActivity:ComponentActivity() {
     private val splashViewModel: SplashViewModel by viewModels()
     private val menuEntradaViewModel: MenuEntradaViewModel by viewModels()
     private val formularioDeAltaViewModel: FormularioDeAltaViewModel by viewModels()
+    private val ajustesViewModel:AjustesViewModel by viewModels()
+
 
 
 
@@ -80,6 +84,7 @@ class MainActivity:ComponentActivity() {
                         composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel, navigationController ) }
                         composable(Ruta.FormularioDeAlta.route){ Formulario(formularioDeAltaViewModel, navigationController) }
                         composable(Ruta.MasInformacion.route){ InformacionEnGrande(menuEntradaViewModel )}
+                        composable(Ruta.Ajustes.route){ AjustesPantalla(navigationController, AjustesViewModel())}
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }

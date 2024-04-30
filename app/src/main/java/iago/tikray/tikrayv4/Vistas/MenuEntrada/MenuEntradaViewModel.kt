@@ -140,6 +140,8 @@ class MenuEntradaViewModel @Inject constructor() : ViewModel() {
                     val nombre: String? = document.getString(datoQueRecorrer)
 
 
+
+
                     if (nombre != null) {
                         nombres.add(nombre)
                     }
