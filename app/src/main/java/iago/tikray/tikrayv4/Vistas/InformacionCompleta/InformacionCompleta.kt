@@ -15,30 +15,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.modifier.modifierLocalConsumer
-import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.navigation.NavHostController
-import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.R
-import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.FormularioDeAltaViewModel
 import iago.tikray.tikrayv4.Vistas.MenuEntrada.MenuEntradaViewModel
-import iago.tikray.tikrayv4.Vistas.MenuNavegacion
-import iago.tikray.tikrayv4.Vistas.Register.Colorss1
 import iago.tikray.tikrayv4.Vistas.Register.Colorss3
 
 
 @Composable
-fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel) {
+fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel, informacionCompletaViewModel: InformacionCompletaViewModel) {
+    val context = LocalContext.current
+
+
 
 
     ConstraintLayout(
@@ -99,7 +92,9 @@ fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel) {
                     imageVector = Icons.Filled.ContentCopy,
                     contentDescription = null,
                     tint = Color.White,
-                    modifier = Modifier.clickable {})
+                    modifier = Modifier.clickable {informacionCompletaViewModel.copyToClipboard(
+                        menuEntradaViewModel.addressS.value.toString(), context)})
+
             },
 
 

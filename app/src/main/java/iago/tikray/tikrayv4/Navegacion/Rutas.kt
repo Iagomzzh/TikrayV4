@@ -16,7 +16,10 @@ sealed class Ruta(val route:String) {
 
     object MasInformacion:Ruta("MasInformacion")
 
+    object  Fichar:Ruta("Fichar")
     object Ajustes:Ruta("Ajustes")
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

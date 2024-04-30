@@ -15,6 +15,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.EventNote
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.NoteAlt
+import androidx.compose.material.icons.filled.PersonPinCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.StickyNote2
 import androidx.compose.material3.Icon
@@ -69,12 +70,12 @@ fun MenuNavegacion(navigation: NavHostController) {
                     })
 
             Icon(
-                imageVector = Icons.Filled.StickyNote2,
-                contentDescription = "iconoNotas",
+                imageVector = Icons.Filled.PersonPinCircle,
+                contentDescription = "iconoFichar",
                 tint = Color.White,
                 modifier = Modifier
                     .size(100.dp)
-                    .clickable { }
+                    .clickable { navigation.navigate(Ruta.Fichar.route) }
                     .constrainAs(iconoNote) {
                         start.linkTo(iconoHome.start)
                         end.linkTo(iconoSettings.end)

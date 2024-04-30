@@ -16,8 +16,11 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import iago.tikray.tikrayv4.Vistas.Ajustes.AjustesPantalla
 import iago.tikray.tikrayv4.Vistas.Ajustes.AjustesViewModel
+import iago.tikray.tikrayv4.Vistas.Fichar.Fichar
+import iago.tikray.tikrayv4.Vistas.Fichar.FicharModelView
 import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.Formulario
 import iago.tikray.tikrayv4.Vistas.FormularioDeAlta.FormularioDeAltaViewModel
+import iago.tikray.tikrayv4.Vistas.InformacionCompleta.InformacionCompletaViewModel
 import iago.tikray.tikrayv4.Vistas.InformacionCompleta.InformacionEnGrande
 import iago.tikray.tikrayv4.Vistas.Login.LoginViewModel
 import iago.tikray.tikrayv4.Vistas.Login.ScreenLogin
@@ -41,6 +44,8 @@ class MainActivity:ComponentActivity() {
     private val menuEntradaViewModel: MenuEntradaViewModel by viewModels()
     private val formularioDeAltaViewModel: FormularioDeAltaViewModel by viewModels()
     private val ajustesViewModel:AjustesViewModel by viewModels()
+    private val informacionCompletaViewModel:InformacionCompletaViewModel by viewModels()
+    private val ficharModelView:FicharModelView by viewModels()
 
 
 
@@ -70,6 +75,7 @@ class MainActivity:ComponentActivity() {
                     menuEntradaViewModel.imprimirInformacion("telefono")
 
 
+
                     val navigationController = rememberNavController()
 
                     NavHost(navController = navigationController, startDestination = Ruta.PaginaSplash.route) {
@@ -83,8 +89,9 @@ class MainActivity:ComponentActivity() {
                         composable(Ruta.PaginaSplash.route){ Splash(navigationController, splashViewModel) }
                         composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel, navigationController ) }
                         composable(Ruta.FormularioDeAlta.route){ Formulario(formularioDeAltaViewModel, navigationController) }
-                        composable(Ruta.MasInformacion.route){ InformacionEnGrande(menuEntradaViewModel )}
+                        composable(Ruta.MasInformacion.route){ InformacionEnGrande(menuEntradaViewModel, informacionCompletaViewModel)}
                         composable(Ruta.Ajustes.route){ AjustesPantalla(navigationController, AjustesViewModel())}
+                        composable(Ruta.Fichar.route){ Fichar(FicharModelView(), navigationController)}
 
                         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
                     }
