@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +39,10 @@ import iago.tikray.tikrayv4.R
 import iago.tikray.tikrayv4.Vistas.Register.Colorss
 import iago.tikray.tikrayv4.Vistas.Register.Colorss1
 import iago.tikray.tikrayv4.Vistas.Register.colorsButton
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -46,7 +51,7 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostCont
 
 
 
-
+    val showLoading = remember { mutableStateOf(false) }
 
     //Instancias de variables
     val hora: Int by formularioDeAltaViewModel.horaSelect.observeAsState(initial = 0)
@@ -66,7 +71,7 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostCont
             .background(color = colorResource(id = R.color.tikrayColor1))
     ) {
 
-        val (imagen, nombre, telefono, textoExplicativo, inicioHorario, inicioTexto, finalTexto, finalHorario, puestoTrabajo, botonContinue) = createRefs()
+        val (imagen, nombre, telefono, circularCharge, textoExplicativo, inicioHorario, inicioTexto, finalTexto, finalHorario, puestoTrabajo, botonContinue) = createRefs()
         val topMargen = createGuidelineFromTop(0.1f)
 
 
@@ -195,7 +200,12 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostCont
 
 
 
-        Button(onClick = { formularioDeAltaViewModel.guardarDatos(formularioDeAltaViewModel, FirebaseAuth(), navHostController)},
+        Button(onClick = { CoroutineScope(Dispatchers.Main).launch {
+            showLoading.value = true
+            delay(3000L) // Retraso de 5 segundos
+            showLoading.value = false
+            formularioDeAltaViewModel.guardarDatos(formularioDeAltaViewModel, FirebaseAuth(), navHostController)
+        }       },
             Modifier
                 .constrainAs(botonContinue) {
                     start.linkTo(parent.start)
@@ -210,6 +220,15 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostCont
         {
             Text(text = "Continuar")
 
+        }
+
+
+        if (showLoading.value) {
+            CircularProgressIndicator(modifier = Modifier.constrainAs(circularCharge){
+                start.linkTo(botonContinue.start)
+                end.linkTo(botonContinue.end)
+                top.linkTo(botonContinue.bottom, margin = 5.dp)
+            }) // Muestra el indicador de progreso cuando showLoading es true
         }
 
 

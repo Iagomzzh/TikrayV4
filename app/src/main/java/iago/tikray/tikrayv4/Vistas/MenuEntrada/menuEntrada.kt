@@ -29,6 +29,10 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -43,6 +47,7 @@ fun MenuEntrada(
 
     LazyColumn(Modifier
             .background(colorResource(id = R.color.black)).fillMaxSize(0.1f)) {
+
         menuEntradaViewModel.obtenerSizeDeDocument()
         menuEntradaViewModel.numeroDeEmpleados.value?.let {
             items(it) {
@@ -96,6 +101,7 @@ fun EmpleadosReciclyerView(
                 .fillMaxSize()
                 .background(colorResource(id = R.color.tikrayColor1))
         ) {
+            menuEntradaViewModel.obtenerSizeDeDocument()
 
 
             val (imagen, nombre, telefono, puesto, estado, correo, textoHorario, horario) = createRefs()

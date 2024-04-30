@@ -65,7 +65,6 @@ class MainActivity:ComponentActivity() {
                     menuEntradaViewModel.imprimirInformacion("horaInicio")
                     menuEntradaViewModel.imprimirInformacion("telefono")
 
-                    menuEntradaViewModel.obtenerSizeDeDocument()
 
                     val navigationController = rememberNavController()
 

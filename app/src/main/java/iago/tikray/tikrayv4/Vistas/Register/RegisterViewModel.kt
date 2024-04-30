@@ -1,6 +1,7 @@
 
 package iago.tikray.tikrayv4.Vistas.Register
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Visibility
@@ -257,6 +258,7 @@ class RegisterViewModel @Inject constructor() : ViewModel() {
 
 
     //FUNCIÓN PARA CREAR LOS ALERTDIALOGS PARA CUANDO SE PULSE EL BOTÓN DE REGISTER NOTIFIQUE AL USUARIO COMO HA IDO, Y PARA CONTROLAR SI SE MUESTRAN O NO LOS ALERTSDIALOGS
+    @SuppressLint("SuspiciousIndentation")
     @Composable
     fun DialogoRegister(valor: Int) {
         var a by remember { mutableIntStateOf(0) }

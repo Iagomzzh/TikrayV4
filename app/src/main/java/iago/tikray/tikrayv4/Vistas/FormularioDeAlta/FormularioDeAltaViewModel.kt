@@ -29,6 +29,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.Vistas.Register.Colorss1
 import iago.tikray.tikrayv4.Vistas.Register.Colorss2
+import kotlinx.coroutines.Delay
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -247,10 +248,17 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
                 )
             )
 
+
+
             navigationController.navigate(Ruta.MenuEntrada.route)
         }
 
 
+    }
+
+    suspend fun delay() {
+
+        kotlinx.coroutines.delay(5000L, )
     }
 
 
