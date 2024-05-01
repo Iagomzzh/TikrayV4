@@ -9,8 +9,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
@@ -18,20 +22,25 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import iago.tikray.tikrayv4.AlertDialogExample
 import iago.tikray.tikrayv4.R
 import iago.tikray.tikrayv4.Vistas.MenuNavegacion
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
     ConstraintLayout(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.tikrayColor1))){
-        val estadoPermiso by ficharModelView.estadoDelPermisoUbicacion.observeAsState(initial = false)
+        val estadoPermiso by ficharModelView.estadoDelPermisoUbicacion.observeAsState(initial = true)
+        val dialogoError by ficharModelView.dialogoDeError.observeAsState(initial = false)
+        val obtenerUbi by ficharModelView.obtenerUbi.observeAsState(initial = false)
+
 
         val permissionLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) {
-            granted -> if (granted){
+            granted -> if (estadoPermiso){
                 ficharModelView.cambiarEstadoDelPermiso(granted)
                 Log.d("Estado", "El permiso esta: $granted")
 
@@ -47,6 +56,13 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
         }
         }
 
+        ficharModelView.Alpulsar(estadoPermiso = estadoPermiso , dialogoDeError = dialogoError )
+
+
+
+
+
+
 
 
 
@@ -56,7 +72,14 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
 
         Button(onClick = {permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
             permissionLauncher.launch("android.permission.ACCESS_FINE_LOCATION",)
-            ficharModelView.ejecutarBoton(context)}, modifier = Modifier.constrainAs(botonFichar){
+            ficharModelView.cambiarObtenerUbi(true)
+
+
+
+
+
+
+            }, modifier = Modifier.constrainAs(botonFichar){
 
             start.linkTo(parent.start)
             end.linkTo(parent.end)
@@ -65,6 +88,14 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
         } ) {
             Text(text = "Fichar")
 
+        }
+        if (obtenerUbi){
+            LaunchedEffect(key1 = ficharModelView) {
+                ficharModelView.ejecutarBoton(context)
+                 ficharModelView.cambiarObtenerUbi(false)
+
+
+            }
         }
 
 
@@ -82,6 +113,8 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
 
 
     }
+
+
 
 
 
