@@ -1,12 +1,18 @@
 package iago.tikray.tikrayv4.Vistas.Fichar
 
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -20,11 +26,38 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
     ConstraintLayout(modifier = Modifier
         .fillMaxSize()
         .background(colorResource(id = R.color.tikrayColor1))){
+        val estadoPermiso by ficharModelView.estadoDelPermisoUbicacion.observeAsState(initial = false)
+
+        val permissionLauncher = rememberLauncherForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) {
+            granted -> if (granted){
+                ficharModelView.cambiarEstadoDelPermiso(granted)
+                Log.d("Estado", "El permiso esta: $granted")
+
+
+
+
+        }
+            else{
+            ficharModelView.cambiarEstadoDelPermiso(granted)
+            Log.d("Estado", "El permiso esta: $granted")
+
+
+        }
+        }
+
+
+
+
 
         val (menuNavegacion, botonFichar) = createRefs()
+        val context = LocalContext.current
 
+        Button(onClick = {permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
+            permissionLauncher.launch("android.permission.ACCESS_FINE_LOCATION",)
+            ficharModelView.ejecutarBoton(context)}, modifier = Modifier.constrainAs(botonFichar){
 
-        Button(onClick = { /*TODO*/ }, modifier = Modifier.constrainAs(botonFichar){
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             top.linkTo(parent.top)
