@@ -54,33 +54,6 @@ class FicharModelView @Inject constructor() : ViewModel() {
     val distancia: LiveData<Double?> = _distancia
 
 
-    @SuppressLint("MissingPermission")
-    fun solicitarActualizacionesUbicacion(context: Context) {
-        val fusedLocationClient: FusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(context)
-
-        val locationRequest = LocationRequest.create().apply {
-            interval = 10000 // Actualizaciones de ubicación cada 10 segundos
-            fastestInterval = 5000 // Actualizaciones de ubicación más rápidas si están disponibles
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        }
-
-        val locationCallback = object : LocationCallback() {
-            override fun onLocationResult(p0: LocationResult) {
-                p0 ?: return
-                for (location in p0.locations) {
-                    Log.d("loca", "$location")
-                }
-            }
-        }
-
-        fusedLocationClient.requestLocationUpdates(
-            locationRequest,
-            locationCallback,
-            Looper.getMainLooper()
-        )
-    }
-
 
     @SuppressLint("MissingPermission")
     fun obtenerUbicacion(context: Context) {
@@ -103,31 +76,16 @@ class FicharModelView @Inject constructor() : ViewModel() {
     }
 
     suspend fun ejecutarBoton(context: Context) {
+        Log.d("variables", "${_estadoDelPermisoUbicacion.value}")
+
         if (_estadoDelPermisoUbicacion.value != null && _estadoDelPermisoUbicacion.value == true) {
-            solicitarActualizacionesUbicacion(context)
             obtenerUbicacion(context)
             val ubicacionNecesariaX = 41.42791245505382
             val ubicacionNecesariaY = 2.190342861050696
             esperarUbicacion()
             val ubicacionObtenida = ubicacionX
 
-            _distancia.value = calcularDistancia(
-                _ubicacionX.value?.toDouble() ?: 1.0,
-                _ubicacionY.value?.toDouble() ?: 1.0,
-                ubicacionNecesariaX,
-                ubicacionNecesariaY
-            ).toDouble()
-            Log.d(
-                "la distancia es:",
-                " ${
-                    calcularDistancia(
-                        _ubicacionX.value?.toDouble() ?: 1.0,
-                        _ubicacionY.value?.toDouble() ?: 1.0,
-                        ubicacionNecesariaX,
-                        ubicacionNecesariaY
-                    ).toInt()
-                }"
-            )
+
 
 
         }
@@ -159,6 +117,56 @@ class FicharModelView @Inject constructor() : ViewModel() {
     fun cambiarDialogoErrorEstado(dialogoDeError: Boolean) {
         _dialogoDeError.value = dialogoDeError
     }
+
+    @SuppressLint("MissingPermission")
+    suspend fun funcionEnteraParaLaUbicacion(context: Context) {
+        if (_estadoDelPermisoUbicacion.value != false) {
+            val fusedLocationClient: FusedLocationProviderClient =
+                LocationServices.getFusedLocationProviderClient(context)
+
+            val locationRequest = LocationRequest.create().apply {
+                interval = 10000 // Actualizaciones de ubicación cada 10 segundos
+                fastestInterval =
+                    5000 // Actualizaciones de ubicación más rápidas si están disponibles
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            }
+
+            val locationCallback = object : LocationCallback() {
+                override fun onLocationResult(p0: LocationResult) {
+                    p0 ?: return
+                    for (location in p0.locations) {
+                        Log.d("loca", "$location")
+                    }
+                }
+            }
+
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+
+            delay(1000L)
+            obtenerUbicacion(context)
+            esperarUbicacion()
+            val ubicacionNecesariaX = 41.42791245505382
+            val ubicacionNecesariaY = 2.190342861050696
+            _distancia.value = calcularDistancia(
+                _ubicacionX.value?.toDouble() ?: 1.0,
+                _ubicacionY.value?.toDouble() ?: 1.0,
+                ubicacionNecesariaX,
+                ubicacionNecesariaY
+            ).toDouble()
+            Log.d(
+                "la distancia es:",
+                " ${distancia.value}"
+            )
+
+
+        }
+    }
+
+
 
 
     @Composable

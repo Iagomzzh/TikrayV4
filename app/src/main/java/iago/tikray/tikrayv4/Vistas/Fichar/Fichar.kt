@@ -42,7 +42,8 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
         ) {
             granted -> if (estadoPermiso){
                 ficharModelView.cambiarEstadoDelPermiso(granted)
-                Log.d("Estado", "El permiso esta: $granted")
+                Log.d("Estado", "El permiso esta: $granted, $estadoPermiso" )
+                ficharModelView.cambiarObtenerUbi(true)
 
 
 
@@ -51,12 +52,29 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
             else{
             ficharModelView.cambiarEstadoDelPermiso(granted)
             Log.d("Estado", "El permiso esta: $granted")
+            ficharModelView.cambiarObtenerUbi(false)
+
 
 
         }
+
+
+
+
+        }
+        val context = LocalContext.current
+
+        if (obtenerUbi){
+            LaunchedEffect(key1 = ficharModelView) {
+                ficharModelView.funcionEnteraParaLaUbicacion(context)
+                ficharModelView.cambiarObtenerUbi(false)
+
+
+
+            }
         }
 
-        ficharModelView.Alpulsar(estadoPermiso = estadoPermiso , dialogoDeError = dialogoError )
+
 
 
 
@@ -68,11 +86,10 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
 
 
         val (menuNavegacion, botonFichar) = createRefs()
-        val context = LocalContext.current
 
         Button(onClick = {permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
-            permissionLauncher.launch("android.permission.ACCESS_FINE_LOCATION",)
-            ficharModelView.cambiarObtenerUbi(true)
+            permissionLauncher.launch("android.permission.ACCESS_FINE_LOCATION")
+
 
 
 
@@ -89,14 +106,9 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
             Text(text = "Fichar")
 
         }
-        if (obtenerUbi){
-            LaunchedEffect(key1 = ficharModelView) {
-                ficharModelView.ejecutarBoton(context)
-                 ficharModelView.cambiarObtenerUbi(false)
 
 
-            }
-        }
+        ficharModelView.Alpulsar(estadoPermiso = estadoPermiso , dialogoDeError = dialogoError )
 
 
 
