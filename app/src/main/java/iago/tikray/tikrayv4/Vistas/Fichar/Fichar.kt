@@ -47,7 +47,6 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
 
 
 
-
         }
             else{
             ficharModelView.cambiarEstadoDelPermiso(granted)

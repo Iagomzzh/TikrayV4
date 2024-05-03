@@ -3,8 +3,10 @@ package iago.tikray.tikrayv4.Vistas.Fichar
 import android.annotation.SuppressLint
 import android.content.Context
 import android.location.Location
+import android.os.Build
 import android.os.Looper
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,14 +17,25 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 import com.google.android.gms.location.*
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.rpc.context.AttributeContext.Auth
 import iago.tikray.tikrayv4.AlertDialogExample
+import iago.tikray.tikrayv4.Firebase.Firestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 
 @Suppress("DEPRECATION")
 @HiltViewModel
 class FicharModelView @Inject constructor() : ViewModel() {
+
+    val db = FirebaseFirestore.getInstance()
+    val firebaseAuth = FirebaseAuth.getInstance()
 
 
     private val _estadoDelPermisoUbicacion = MutableLiveData<Boolean>()
@@ -113,11 +126,24 @@ class FicharModelView @Inject constructor() : ViewModel() {
         return punto1.distanceTo(punto2)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentDateString(): String {
+        val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+        return LocalDate.now().format(formatter)
+    }
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun getCurrentTimeString(): String {
+        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
+        return LocalTime.now().format(formatter)
+    }
+
+
 
     fun cambiarDialogoErrorEstado(dialogoDeError: Boolean) {
         _dialogoDeError.value = dialogoDeError
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
     suspend fun funcionEnteraParaLaUbicacion(context: Context) {
         if (_estadoDelPermisoUbicacion.value != false) {
@@ -161,6 +187,22 @@ class FicharModelView @Inject constructor() : ViewModel() {
                 "la distancia es:",
                 " ${distancia.value}"
             )
+
+            val distanciaToInt = distancia.value?.toInt()
+            if (distanciaToInt != null && distanciaToInt > 80){
+                val userEmail = firebaseAuth.currentUser?.email.toString()
+                val horaActual = getCurrentTimeString()
+                val fecha = getCurrentDateString()
+                db.collection("ultimoFichaje").document(userEmail).set(
+
+                    hashMapOf(
+                        "correo" to userEmail,
+                        "hora" to horaActual,
+                        "fecha" to fecha,
+
+                    ))
+
+            }
 
 
         }
