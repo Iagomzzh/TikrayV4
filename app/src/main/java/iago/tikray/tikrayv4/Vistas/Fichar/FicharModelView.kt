@@ -48,13 +48,29 @@ class FicharModelView @Inject constructor() : ViewModel() {
     val obtenerUbi: LiveData<Boolean> = _obtenerUbi
 
 
-    fun cambiarObtenerUbi(estado:Boolean) {
+    fun cambiarObtenerUbi(estado: Boolean) {
         _obtenerUbi.value = estado
     }
 
 
     private val _ubicacion = MutableLiveData<Location?>()
     val ubicacion: LiveData<Location?> = _ubicacion
+    private val _direccionFichaje = MutableLiveData<String?>()
+    val direecionFichaje: LiveData<String?> = _direccionFichaje
+
+    fun imprimirInformacion(datoQueRecorrer: String) {
+        val db = FirebaseFirestore.getInstance()
+        var a: List<String> = listOf()
+        val nombres = mutableListOf<String>()
+
+        db.collection("ultimoFichaje").get()
+            .addOnSuccessListener { result ->
+                for (document in result) {
+                    val nombre: String? = document.getString("estado")
+
+                }
+            }
+    }
 
     private val _ubicacionX = MutableLiveData<Double?>()
     val ubicacionX: LiveData<Double?> = _ubicacionX
@@ -65,7 +81,6 @@ class FicharModelView @Inject constructor() : ViewModel() {
 
     private val _distancia = MutableLiveData<Double?>()
     val distancia: LiveData<Double?> = _distancia
-
 
 
     @SuppressLint("MissingPermission")
@@ -93,12 +108,9 @@ class FicharModelView @Inject constructor() : ViewModel() {
 
         if (_estadoDelPermisoUbicacion.value != null && _estadoDelPermisoUbicacion.value == true) {
             obtenerUbicacion(context)
-            val ubicacionNecesariaX = 41.42791245505382
-            val ubicacionNecesariaY = 2.190342861050696
+
             esperarUbicacion()
             val ubicacionObtenida = ubicacionX
-
-
 
 
         }
@@ -131,12 +143,12 @@ class FicharModelView @Inject constructor() : ViewModel() {
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
         return LocalDate.now().format(formatter)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     fun getCurrentTimeString(): String {
         val formatter = DateTimeFormatter.ofPattern("HH:mm:ss")
         return LocalTime.now().format(formatter)
     }
-
 
 
     fun cambiarDialogoErrorEstado(dialogoDeError: Boolean) {
@@ -175,8 +187,8 @@ class FicharModelView @Inject constructor() : ViewModel() {
             delay(1000L)
             obtenerUbicacion(context)
             esperarUbicacion()
-            val ubicacionNecesariaX = 41.42791245505382
-            val ubicacionNecesariaY = 2.190342861050696
+            val ubicacionNecesariaX = 41.453380392340705
+            val ubicacionNecesariaY = 2.1862865649926837
             _distancia.value = calcularDistancia(
                 _ubicacionX.value?.toDouble() ?: 1.0,
                 _ubicacionY.value?.toDouble() ?: 1.0,
@@ -189,7 +201,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
             )
 
             val distanciaToInt = distancia.value?.toInt()
-            if (distanciaToInt != null && distanciaToInt > 80){
+            if (distanciaToInt != null && distanciaToInt < 80) {
                 val userEmail = firebaseAuth.currentUser?.email.toString()
                 val horaActual = getCurrentTimeString()
                 val fecha = getCurrentDateString()
@@ -200,7 +212,19 @@ class FicharModelView @Inject constructor() : ViewModel() {
                         "hora" to horaActual,
                         "fecha" to fecha,
 
-                    ))
+
+
+                        )
+                )
+
+                db.collection("fichaje").document().set(
+                    hashMapOf(
+                        "correo" to userEmail,
+                        "hora" to horaActual,
+                        "fecha" to fecha
+                    )
+                )
+
 
             }
 
@@ -209,11 +233,8 @@ class FicharModelView @Inject constructor() : ViewModel() {
     }
 
 
-
-
     @Composable
     fun Alpulsar(estadoPermiso: Boolean, dialogoDeError: Boolean) {
-
 
 
         if (!estadoPermiso || dialogoDeError) {
@@ -226,8 +247,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
                 textBody = "Parece que la app no tiene permisos para acceder a la ubicación, cambie el permiso y vuelva a intentarlo"
             )
 
-        }
-        else{
+        } else {
 
 
         }
@@ -235,53 +255,4 @@ class FicharModelView @Inject constructor() : ViewModel() {
 
 
 }
-
-
-//    private lateinit var fusedLocateClient:FusedLocationProviderClient
-//    private lateinit var locationCallBack:LocationCallback
-//
-//
-
-//
-//    fun botonFichar(permision:Boolean){
-//        if (!permision){
-//
-//        }
-//    }
-//
-//
-
-//
-//    @SuppressLint("MissingPermission")
-//    fun obtenerUbicacion(actividad:Context) {
-//         fusedLocateClient = LocationServices.getFusedLocationProviderClient(actividad)
-//        try {
-//
-//            fusedLocateClient.lastLocation.addOnSuccessListener {
-//                if (it != null){
-//                    Log.d("localizacion", "$it")
-//
-//
-//                }
-//                else{
-//                    Log.d(" Error localizacion", "$it")
-//
-//                }
-//
-//            }
-//            val localRequest = LocationRequest.Builder(
-//                Priority.PRIORITY_HIGH_ACCURACY,
-//                30000).apply { setGranularity(Granularity.GRANULARITY_PERMISSION_LEVEL)
-//                setWaitForAccurateLocation(true)}.build()
-//            locationCallBack = object : LocationCallback() {
-//                override fun onLocationResult(p0: LocationResult) {
-//                    super.onLocationResult(p0)
-//
-//                    for (location in p0.locations){
-//                        imp
-//                    }
-//                }
-//            }
-//        }
-//    }
 

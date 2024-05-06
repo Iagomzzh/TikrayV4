@@ -1,8 +1,10 @@
 package iago.tikray.tikrayv4.Vistas.Fichar
 
+import android.os.Build
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,6 +29,7 @@ import iago.tikray.tikrayv4.R
 import iago.tikray.tikrayv4.Vistas.MenuNavegacion
 import kotlinx.coroutines.CoroutineScope
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
     ConstraintLayout(modifier = Modifier
