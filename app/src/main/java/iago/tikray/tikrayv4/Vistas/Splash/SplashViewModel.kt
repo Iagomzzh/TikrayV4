@@ -22,7 +22,9 @@ class SplashViewModel @Inject constructor(private val authService: AuthService):
     fun checkDestination(navigationController: NavHostController) {
         val isUserLogged:Boolean = isUSerLogged()
         if(isUserLogged) {
-            navigationController.navigate(Ruta.MenuEntrada.route)
+            //navigationController.navigate(Ruta.MenuEntrada.route)
+            //temporal
+            navigationController.navigate(Ruta.FormularioDeAlta.route)
 
 
 

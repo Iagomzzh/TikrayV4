@@ -17,13 +17,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 import com.google.android.gms.location.*
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.rpc.context.AttributeContext.Auth
 import iago.tikray.tikrayv4.AlertDialogExample
-import iago.tikray.tikrayv4.Firebase.Firestore
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import java.time.LocalDate
 import java.time.LocalTime
@@ -55,8 +51,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
 
     private val _ubicacion = MutableLiveData<Location?>()
     val ubicacion: LiveData<Location?> = _ubicacion
-    private val _direccionFichaje = MutableLiveData<String?>()
-    val direecionFichaje: LiveData<String?> = _direccionFichaje
+
 
     fun imprimirInformacion(datoQueRecorrer: String) {
         val db = FirebaseFirestore.getInstance()
@@ -81,6 +76,14 @@ class FicharModelView @Inject constructor() : ViewModel() {
 
     private val _distancia = MutableLiveData<Double?>()
     val distancia: LiveData<Double?> = _distancia
+
+    private val _entradaOsalida = MutableLiveData<String?>()
+    val entradaOsalida:LiveData<String?> = _entradaOsalida
+
+    fun cambiarEntradaOSalida(entradaOSalida:String) {
+        _entradaOsalida.value = entradaOSalida
+    }
+
 
 
     @SuppressLint("MissingPermission")
@@ -205,12 +208,20 @@ class FicharModelView @Inject constructor() : ViewModel() {
                 val userEmail = firebaseAuth.currentUser?.email.toString()
                 val horaActual = getCurrentTimeString()
                 val fecha = getCurrentDateString()
+                if (entradaOsalida.value == null) {
+                    _entradaOsalida.value = "Sin datos"
+
+                }
                 db.collection("ultimoFichaje").document(userEmail).set(
+
+
+
 
                     hashMapOf(
                         "correo" to userEmail,
                         "hora" to horaActual,
                         "fecha" to fecha,
+                        "EntradaOSalida" to entradaOsalida.value
 
 
 

@@ -24,53 +24,54 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import iago.tikray.tikrayv4.AlertDialogExample
 import iago.tikray.tikrayv4.R
 import iago.tikray.tikrayv4.Vistas.MenuNavegacion
-import kotlinx.coroutines.CoroutineScope
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
-    ConstraintLayout(modifier = Modifier
-        .fillMaxSize()
-        .background(colorResource(id = R.color.tikrayColor1))){
+fun Fichar(ficharModelView: FicharModelView, navigation: NavHostController) {
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.tikrayColor1))
+    ) {
         val estadoPermiso by ficharModelView.estadoDelPermisoUbicacion.observeAsState(initial = true)
         val dialogoError by ficharModelView.dialogoDeError.observeAsState(initial = false)
         val obtenerUbi by ficharModelView.obtenerUbi.observeAsState(initial = false)
 
+        var ag by remember {
+            mutableStateOf(false)
+        }
+
 
         val permissionLauncher = rememberLauncherForActivityResult(
             ActivityResultContracts.RequestPermission()
-        ) {
-            granted -> if (estadoPermiso){
+        ) { granted ->
+            if (estadoPermiso) {
                 ficharModelView.cambiarEstadoDelPermiso(granted)
-                Log.d("Estado", "El permiso esta: $granted, $estadoPermiso" )
-                ficharModelView.cambiarObtenerUbi(true)
+                Log.d("Estado", "El permiso esta: $granted, $estadoPermiso")
+                if (ag) {
+                    ficharModelView.cambiarObtenerUbi(true)
+                }
 
 
-
-        }
-            else{
-            ficharModelView.cambiarEstadoDelPermiso(granted)
-            Log.d("Estado", "El permiso esta: $granted")
-            ficharModelView.cambiarObtenerUbi(false)
+            } else {
+                ficharModelView.cambiarEstadoDelPermiso(granted)
+                Log.d("Estado", "El permiso esta: $granted")
+                ficharModelView.cambiarObtenerUbi(false)
 
 
-
-        }
-
-
+            }
 
 
         }
         val context = LocalContext.current
 
-        if (obtenerUbi){
+        if (obtenerUbi) {
             LaunchedEffect(key1 = ficharModelView) {
+
                 ficharModelView.funcionEnteraParaLaUbicacion(context)
                 ficharModelView.cambiarObtenerUbi(false)
-
 
 
             }
@@ -79,43 +80,48 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
 
 
 
+        val (menuNavegacion, botonFicharEntrada, botonFicharSalida) = createRefs()
 
-
-
-
-
-
-
-
-        val (menuNavegacion, botonFichar) = createRefs()
-
-        Button(onClick = {permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
+        Button(onClick = {
+            permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
             permissionLauncher.launch("android.permission.ACCESS_FINE_LOCATION")
+            ficharModelView.cambiarEntradaOSalida("entrada")
+            ag = true
 
 
-
-
-
-
-
-            }, modifier = Modifier.constrainAs(botonFichar){
+        }, modifier = Modifier.constrainAs(botonFicharEntrada) {
 
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             top.linkTo(parent.top)
             bottom.linkTo(menuNavegacion.top)
-        } ) {
-            Text(text = "Fichar")
+        }) {
+            Text(text = "Fichar Entrada")
 
         }
 
+        Button(onClick = {
+            permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
+            permissionLauncher.launch("android.permission.ACCESS_FINE_LOCATION")
 
-        ficharModelView.Alpulsar(estadoPermiso = estadoPermiso , dialogoDeError = dialogoError )
+
+        }, modifier = Modifier.constrainAs(botonFicharEntrada) {
+
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            top.linkTo(parent.top)
+            bottom.linkTo(menuNavegacion.top)
+        }) {
+            Text(text = "Fichar Salida")
+
+        }
+
+        ficharModelView.Alpulsar(estadoPermiso = estadoPermiso, dialogoDeError = dialogoError)
 
 
 
 
-        Box(modifier = Modifier.constrainAs(menuNavegacion){
+        Box(modifier = Modifier.constrainAs(menuNavegacion) {
             bottom.linkTo(parent.bottom)
         }) {
             MenuNavegacion(navigation)
@@ -124,27 +130,13 @@ fun Fichar(ficharModelView: FicharModelView, navigation:NavHostController) {
         }
 
 
-
-
     }
-
-
-
-
 
 
 }
 
 
-
-
-
-
-
-
-
-
-
+@RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 private fun Preview() {

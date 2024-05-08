@@ -28,15 +28,6 @@ fun PaginaContrasenyaOlvidada(recuperarContrsenyaViewModel: RecuperarContrsenyaV
         val (campoPasswd, texto, codigo, boton) = createRefs()
 
 
-        OutlinedTextField(
-            value = campoCorreo, onValueChange = { }, label = { Text(text = "Correo ") },
-            modifier = Modifier.constrainAs(campoPasswd) {
-                start.linkTo(parent.start)
-                end.linkTo(parent.end)
-                top.linkTo(parent.top)
-                bottom.linkTo(parent.bottom)
-            }, colors = Colorss()
-        )
         Button(onClick = { /*TODO*/ }, colors = colorsButton(), modifier = Modifier.constrainAs(boton){
             top.linkTo(campoPasswd.bottom, margin = 10.dp)
             start.linkTo(campoPasswd.start)
@@ -56,6 +47,6 @@ fun PaginaContrasenyaOlvidada(recuperarContrsenyaViewModel: RecuperarContrsenyaV
 @Preview
 @Composable
 private fun Preview() {
-    PaginaContrasenyaOlvidada()
+    PaginaContrasenyaOlvidada(RecuperarContrsenyaViewModel())
 
 }

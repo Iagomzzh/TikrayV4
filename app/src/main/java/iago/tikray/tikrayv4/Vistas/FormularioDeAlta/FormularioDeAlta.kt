@@ -1,7 +1,15 @@
+@file:Suppress("NAME_SHADOWING")
+
 package iago.tikray.tikrayv4.Vistas.FormularioDeAlta
 
 import android.os.Build
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,6 +25,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -26,14 +35,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.firebase.auth.FirebaseAuth
+import iago.tikray.tikrayv4.AlertDialogExample
 import iago.tikray.tikrayv4.Navegacion.MainActivity
 import iago.tikray.tikrayv4.R
 import iago.tikray.tikrayv4.Vistas.Register.Colorss
@@ -44,9 +58,94 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
+
+
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+fun CameraPreview() {
+    val context = LocalContext.current
+    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+    val permissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
+
+    val imageCapture = remember { ImageCapture.Builder().build() }
+
+    val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+    AndroidView(
+        modifier = Modifier.fillMaxSize(),
+        factory = { context ->
+            val cameraView = CameraView(context)
+            cameraView.bindToLifecycle(
+                lifecycleOwner = LocalLifecycleOwner.current,
+                cameraSelector = cameraSelector,
+                imageCapture = imageCapture
+            )
+            cameraView
+        }
+    )
+
+    // Handle permission request and capture image
+    if (permissionState.hasPermission) {
+        // Capture image logic here
+    } else {
+        // Request permission
+        LaunchedEffect(permissionState) {
+            permissionState.launchPermissionRequest()
+        }
+    }
+}
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostController: NavHostController) {
+
+
+
+
+
+    val estadoPermiso = formularioDeAltaViewModel.estadoPermiso.observeAsState(initial = false)
+    val estadoAlertDialog = formularioDeAltaViewModel.mostrarAlertDialog.observeAsState(initial = false)
+
+
+    val permissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (estadoPermiso.value ) {
+            formularioDeAltaViewModel.cambiarEstadoPermiso(granted)
+            Log.d("Estado", "El permiso esta: $granted, ${estadoPermiso.value}")
+            formularioDeAltaViewModel.cambiarMostrarAlertDialog(false)
+
+
+
+
+        } else {
+            formularioDeAltaViewModel.cambiarEstadoPermiso(granted)
+            formularioDeAltaViewModel.cambiarMostrarAlertDialog(true)
+            Log.d("Estado", "El permiso esta: $granted, ${formularioDeAltaViewModel.mostrarAlertDialog.value}")
+
+
+
+
+
+
+
+        }
+
+
+    }
+
+    if (estadoAlertDialog.value)
+        AlertDialogExample(
+            dismiss = { formularioDeAltaViewModel.cambiarMostrarAlertDialog(false) },
+            confirm = {  formularioDeAltaViewModel.cambiarMostrarAlertDialog(false)},
+            textTitle = "No has concedido permisos",
+            textBody = "Para que puedas usar todas las funciones, sera necesario que des permisos para que podamos usar la camara de tu dispositivo"
+        )
+
+
+
+
+
 
 
 
@@ -83,7 +182,7 @@ fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostCont
                 .background(
                     Color.White
                 )
-                .clickable {  }
+                .clickable { permissionLauncher.launch("android.permission.CAMERA") }
                 .constrainAs(imagen) {
                     start.linkTo(parent.start)
                     end.linkTo(parent.end)

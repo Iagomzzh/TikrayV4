@@ -29,7 +29,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import iago.tikray.tikrayv4.Navegacion.Ruta
 import iago.tikray.tikrayv4.Vistas.Register.Colorss1
 import iago.tikray.tikrayv4.Vistas.Register.Colorss2
-import kotlinx.coroutines.Delay
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -52,6 +51,22 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
 
     private val _numTelefono = MutableLiveData<String>()
     val numTelefono: LiveData<String> = _numTelefono
+
+
+    private val _estadoPermiso = MutableLiveData<Boolean>()
+    val estadoPermiso:LiveData<Boolean> = _estadoPermiso
+
+    private val _mostrarAlertDialog = MutableLiveData<Boolean>()
+    val mostrarAlertDialog:LiveData<Boolean> = _mostrarAlertDialog
+
+    fun cambiarMostrarAlertDialog(estado: Boolean) {
+        _mostrarAlertDialog.value = estado
+    }
+
+    fun cambiarEstadoPermiso(estado:Boolean) {
+        _estadoPermiso.value = estado
+
+    }
 
 
 

@@ -25,13 +25,6 @@ class RecuperarContrsenyaViewModel @Inject constructor(): ViewModel() {
         _emailForReset.value = it
     }
 
-    fun recuperarContrasenya(){
-        auth.sendPasswordResetEmail()
-
-
-
-
-    }
 
 
 }

@@ -30,6 +30,7 @@ import iago.tikray.tikrayv4.Vistas.Register.Register
 import iago.tikray.tikrayv4.Vistas.Register.RegisterViewModel
 import iago.tikray.tikrayv4.Vistas.PaginaPrincipal.ScreenPrincipal
 import iago.tikray.tikrayv4.Vistas.RecuperarContrasenya.PaginaContrasenyaOlvidada
+import iago.tikray.tikrayv4.Vistas.RecuperarContrasenya.RecuperarContrsenyaViewModel
 import iago.tikray.tikrayv4.Vistas.Splash.Splash
 import iago.tikray.tikrayv4.Vistas.Splash.SplashViewModel
 import iago.tikray.tikrayv4.ui.theme.TikrayV4Theme
@@ -85,7 +86,7 @@ class MainActivity:ComponentActivity() {
                         composable(Ruta.PaginaPrincipal.route) { ScreenPrincipal(navigationController) }
                         composable(Ruta.PaginaRegister.route) { Register( registerViewModel, navigationController) }
                         composable(Ruta.PaginaLogin.route){ ScreenLogin(navigationController, loginViewModel) }
-                        composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada() }
+                        composable(Ruta.PaginaRecuperarContrasenya.route){ PaginaContrasenyaOlvidada(RecuperarContrsenyaViewModel()) }
                         composable(Ruta.PaginaSplash.route){ Splash(navigationController, splashViewModel) }
                         composable(Ruta.MenuEntrada.route){ MenuEntrada(menuEntradaViewModel, navigationController ) }
                         composable(Ruta.FormularioDeAlta.route){ Formulario(formularioDeAltaViewModel, navigationController) }
