@@ -1,4 +1,4 @@
-package iago.tikray.tikrayv4.Navegacion.ui.theme
+package iago.tikray.tikrayv4.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

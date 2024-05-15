@@ -62,17 +62,17 @@ import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun CameraPreview() {
-    val context = LocalContext.current
-    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
-    val permissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
 
-    val imageCapture = remember { ImageCapture.Builder().build() }
+//fun CameraPreview() {
+  //  val context = LocalContext.current
+    //val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+    //val permissionState = rememberPermissionState(android.Manifest.permission.CAMERA)
 
-    val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+    //val imageCapture = remember { ImageCapture.Builder().build() }
 
-    AndroidView(
+    //val cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+
+  /*  AndroidView(
         modifier = Modifier.fillMaxSize(),
         factory = { context ->
             val cameraView = CameraView(context)
@@ -95,6 +95,7 @@ fun CameraPreview() {
         }
     }
 }
+*/
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun Formulario(formularioDeAltaViewModel: FormularioDeAltaViewModel, navHostController: NavHostController) {

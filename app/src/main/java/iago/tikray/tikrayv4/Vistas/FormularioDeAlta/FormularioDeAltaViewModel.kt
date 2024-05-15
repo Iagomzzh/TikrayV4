@@ -98,6 +98,13 @@ class FormularioDeAltaViewModel @Inject constructor() : ViewModel() {
     private val _formularioDeAltaCompletado = MutableLiveData<Boolean>()
     val formulariodeAltaCompletado:LiveData<Boolean> = _formularioDeAltaCompletado
 
+    private val _telfCorrecto = MutableLiveData<Boolean>()
+    val telfCorrecto:LiveData<Boolean> = _telfCorrecto
+
+
+
+
+
 
 
 

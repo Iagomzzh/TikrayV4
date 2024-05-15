@@ -8,7 +8,14 @@ import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Error
+import androidx.compose.material.icons.rounded.LocationOff
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,10 +25,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import iago.tikray.tikrayv4.R
@@ -34,10 +44,43 @@ fun Fichar(ficharModelView: FicharModelView, navigation: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.tikrayColor1))
-    ) {
+    )
+    {
         val estadoPermiso by ficharModelView.estadoDelPermisoUbicacion.observeAsState(initial = true)
         val dialogoError by ficharModelView.dialogoDeError.observeAsState(initial = false)
         val obtenerUbi by ficharModelView.obtenerUbi.observeAsState(initial = false)
+        val fichajeCorrecto by ficharModelView.fichajeCorrecto.observeAsState(initial = 3)
+        val estadoFichajes by ficharModelView.estadoFichaje.observeAsState()
+
+
+
+        var icono = Icons.Rounded.LocationOff
+
+
+        var color = Color.White
+
+        if ( fichajeCorrecto == 2){
+
+
+            icono = Icons.Rounded.Error
+            color = Color.Red
+
+
+        }
+
+        else if (fichajeCorrecto == 1){
+            icono = Icons.Rounded.Check
+            color = Color.Green
+
+
+
+        }
+        else if (fichajeCorrecto == 0){
+            color = Color.Transparent
+
+
+
+        }
 
         var ag by remember {
             mutableStateOf(false)
@@ -80,7 +123,7 @@ fun Fichar(ficharModelView: FicharModelView, navigation: NavHostController) {
 
 
 
-        val (menuNavegacion, botonFicharEntrada, botonFicharSalida) = createRefs()
+        val (menuNavegacion, botonFicharEntrada, botonFicharSalida, iconoEstado, loading, estadoFichaje) = createRefs()
 
         Button(onClick = {
             permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
@@ -94,29 +137,60 @@ fun Fichar(ficharModelView: FicharModelView, navigation: NavHostController) {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             top.linkTo(parent.top)
-            bottom.linkTo(menuNavegacion.top)
+            bottom.linkTo(parent.bottom)
         }) {
             Text(text = "Fichar Entrada")
 
+
         }
+
+        Icon(imageVector = icono, contentDescription = null, tint = color, modifier = Modifier
+            .size(45.dp)
+            .constrainAs(iconoEstado) {
+                start.linkTo(botonFicharEntrada.end)
+                end.linkTo(parent.end)
+                top.linkTo(botonFicharEntrada.bottom)
+                bottom.linkTo(botonFicharSalida.top)
+            })
+
+        if (fichajeCorrecto == 0){
+            CircularProgressIndicator(modifier = Modifier.constrainAs(loading){
+                start.linkTo(botonFicharEntrada.end)
+                end.linkTo(parent.end)
+                top.linkTo(botonFicharEntrada.bottom)
+                bottom.linkTo(botonFicharSalida.top)
+
+            })
+        }
+
 
         Button(onClick = {
             permissionLauncher.launch("android.permission.ACCESS_COARSE_LOCATION")
             permissionLauncher.launch("android.permission.ACCESS_FINE_LOCATION")
-
-
-        }, modifier = Modifier.constrainAs(botonFicharEntrada) {
+            ficharModelView.cambiarEntradaOSalida("salida")
+            ag = true
+        }, modifier = Modifier.constrainAs(botonFicharSalida) {
 
             start.linkTo(parent.start)
             end.linkTo(parent.end)
-            top.linkTo(parent.top)
-            bottom.linkTo(menuNavegacion.top)
+            top.linkTo(botonFicharEntrada.bottom, margin = 10.dp)
+
         }) {
             Text(text = "Fichar Salida")
 
         }
 
         ficharModelView.Alpulsar(estadoPermiso = estadoPermiso, dialogoDeError = dialogoError)
+
+        Text(
+            text = estadoFichajes.toString(),
+            color = Color.White,
+            modifier = Modifier.constrainAs(estadoFichaje) {
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+
+            })
+
 
 
 

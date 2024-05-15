@@ -34,8 +34,6 @@ import iago.tikray.tikrayv4.Vistas.RecuperarContrasenya.RecuperarContrsenyaViewM
 import iago.tikray.tikrayv4.Vistas.Splash.Splash
 import iago.tikray.tikrayv4.Vistas.Splash.SplashViewModel
 import iago.tikray.tikrayv4.ui.theme.TikrayV4Theme
-
-
 @AndroidEntryPoint
 class MainActivity:ComponentActivity() {
 
@@ -47,17 +45,6 @@ class MainActivity:ComponentActivity() {
     private val ajustesViewModel:AjustesViewModel by viewModels()
     private val informacionCompletaViewModel:InformacionCompletaViewModel by viewModels()
     private val ficharModelView:FicharModelView by viewModels()
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -74,6 +61,7 @@ class MainActivity:ComponentActivity() {
                     menuEntradaViewModel.imprimirInformacion("horaFinal")
                     menuEntradaViewModel.imprimirInformacion("horaInicio")
                     menuEntradaViewModel.imprimirInformacion("telefono")
+                    ficharModelView.obtenerEstadoDelFichaje()
 
 
 
@@ -102,9 +90,6 @@ class MainActivity:ComponentActivity() {
     }
 }
 
-
-
-
 //    val storage = Firebase.storage
 
 //    @Composable
@@ -131,7 +116,7 @@ class MainActivity:ComponentActivity() {
 //    val name:String = SimpleDateFormat("yyyyMMdd_hhmmss").format(Date()) +  "image"
 //    return File.createTempFile(name, ".jpg", externalCacheDir)
 //
-//}
+// }
 
 
 

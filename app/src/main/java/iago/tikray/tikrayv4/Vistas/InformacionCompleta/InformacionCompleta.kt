@@ -111,7 +111,8 @@ fun InformacionEnGrande(menuEntradaViewModel: MenuEntradaViewModel, informacionC
             modifier = Modifier.constrainAs(telefono) {
                 start.linkTo(startMargin)
                 top.linkTo(correo.bottom, margin = 20.dp)
-            })
+            },
+            )
         Text(text = "Estado: Activo", color = Color.Green, modifier = Modifier.constrainAs(estado) {
             start.linkTo(startMargin)
             top.linkTo(telefono.bottom, margin = 20.dp)

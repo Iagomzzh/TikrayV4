@@ -17,21 +17,33 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 import com.google.android.gms.location.*
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import iago.tikray.tikrayv4.AlertDialogExample
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 @Suppress("DEPRECATION")
 @HiltViewModel
 class FicharModelView @Inject constructor() : ViewModel() {
 
+
     val db = FirebaseFirestore.getInstance()
     val firebaseAuth = FirebaseAuth.getInstance()
+    var userEmail = firebaseAuth.currentUser?.email.toString()
+
 
 
     private val _estadoDelPermisoUbicacion = MutableLiveData<Boolean>()
@@ -43,6 +55,16 @@ class FicharModelView @Inject constructor() : ViewModel() {
     private val _obtenerUbi = MutableLiveData<Boolean>()
     val obtenerUbi: LiveData<Boolean> = _obtenerUbi
 
+    private val _fichajeCorrecto = MutableLiveData<Int>()
+    val fichajeCorrecto:LiveData<Int> = _fichajeCorrecto
+
+    private val _estadoFichaje = MutableLiveData<String>()
+    val estadoFichaje:LiveData<String> = _estadoFichaje
+
+    fun cambiarFichaje(number: Int){
+        _fichajeCorrecto.value = number
+    }
+
 
     fun cambiarObtenerUbi(estado: Boolean) {
         _obtenerUbi.value = estado
@@ -53,19 +75,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
     val ubicacion: LiveData<Location?> = _ubicacion
 
 
-    fun imprimirInformacion(datoQueRecorrer: String) {
-        val db = FirebaseFirestore.getInstance()
-        var a: List<String> = listOf()
-        val nombres = mutableListOf<String>()
 
-        db.collection("ultimoFichaje").get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    val nombre: String? = document.getString("estado")
-
-                }
-            }
-    }
 
     private val _ubicacionX = MutableLiveData<Double?>()
     val ubicacionX: LiveData<Double?> = _ubicacionX
@@ -83,6 +93,33 @@ class FicharModelView @Inject constructor() : ViewModel() {
     fun cambiarEntradaOSalida(entradaOSalida:String) {
         _entradaOsalida.value = entradaOSalida
     }
+
+
+    fun obtenerEstadoDelFichaje() {
+        val db = FirebaseFirestore.getInstance()
+        userEmail = firebaseAuth.currentUser?.email.toString()
+
+        db.collection("ultimoFichaje").document(userEmail).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    Log.d("Firestore", "DocumentSnapshot data: ${document.data}")
+                    val campo = document.getString("EntradaOSalida")
+
+                    Log.d("Firestore", "Campo: $campo")
+                    Log.d("Firestore", "mail: $userEmail")
+
+
+                        _estadoFichaje.value = campo.toString()
+
+
+
+                } else {
+                    Log.d("Firestore", "No such document")
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Firestore", "get failed with ", exception)
+            }}
 
 
 
@@ -158,10 +195,12 @@ class FicharModelView @Inject constructor() : ViewModel() {
         _dialogoDeError.value = dialogoDeError
     }
 
+    @OptIn(InternalCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("MissingPermission")
-    suspend fun funcionEnteraParaLaUbicacion(context: Context) {
+    suspend fun funcionEnteraParaLaUbicacion(context: Context, ): Boolean {
         if (_estadoDelPermisoUbicacion.value != false) {
+            _fichajeCorrecto.value = 0
             val fusedLocationClient: FusedLocationProviderClient =
                 LocationServices.getFusedLocationProviderClient(context)
 
@@ -178,6 +217,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
                     for (location in p0.locations) {
                         Log.d("loca", "$location")
                     }
+
                 }
             }
 
@@ -205,7 +245,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
 
             val distanciaToInt = distancia.value?.toInt()
             if (distanciaToInt != null && distanciaToInt < 80) {
-                val userEmail = firebaseAuth.currentUser?.email.toString()
+
                 val horaActual = getCurrentTimeString()
                 val fecha = getCurrentDateString()
                 if (entradaOsalida.value == null) {
@@ -228,19 +268,55 @@ class FicharModelView @Inject constructor() : ViewModel() {
                         )
                 )
 
-                db.collection("fichaje").document().set(
-                    hashMapOf(
-                        "correo" to userEmail,
-                        "hora" to horaActual,
-                        "fecha" to fecha
-                    )
+                val db = FirebaseFirestore.getInstance()
+                val data = hashMapOf(
+                    "correo" to userEmail,
+                    "hora" to horaActual,
+                    "fecha" to fecha,
+                    "EntradaOSalida" to entradaOsalida.value
                 )
+
+                return suspendCancellableCoroutine<Boolean> { continuation ->
+                    db.collection("fichaje").document("$userEmail, $fecha, $horaActual").set(data)
+                        .addOnSuccessListener {
+                            continuation.resume(true)
+                            _fichajeCorrecto.value = 1
+                            Log.d("a", "${_fichajeCorrecto.value} anddd ${it.toString()}")
+                        }
+                        .addOnFailureListener { e ->
+                            continuation.resume(false)
+                            _fichajeCorrecto.value = 2
+                            Log.d("a", "${_fichajeCorrecto.value} anddd $e.")
+                        }
+
+                    // Inicia un temporizador que cancelará la corrutina después de 5 segundos
+                    GlobalScope.launch {
+                        delay(5000L)
+                        if (continuation.isActive) {
+                            continuation.cancel(CancellationException("Timeout"))
+                            _fichajeCorrecto.postValue(2)
+                            Log.d("a", "${_fichajeCorrecto.value} anddd timeout.")
+                        }
+                    }
+                }
+
+
+
+
 
 
             }
 
 
+
+
+
+
+
+
+
         }
+       return false
     }
 
 
