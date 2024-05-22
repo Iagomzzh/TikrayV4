@@ -90,6 +90,9 @@ class FicharModelView @Inject constructor() : ViewModel() {
     private val _entradaOsalida = MutableLiveData<String?>()
     val entradaOsalida:LiveData<String?> = _entradaOsalida
 
+    private  val _estadoEntradaOSalida = MutableLiveData<String>()
+    val estadoEntradaOSalida:LiveData<String> = _estadoEntradaOSalida
+
     fun cambiarEntradaOSalida(entradaOSalida:String) {
         _entradaOsalida.value = entradaOSalida
     }
@@ -109,7 +112,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
                     Log.d("Firestore", "mail: $userEmail")
 
 
-                        _estadoFichaje.value = campo.toString()
+
 
 
 
@@ -277,7 +280,7 @@ class FicharModelView @Inject constructor() : ViewModel() {
                 )
 
                 return suspendCancellableCoroutine<Boolean> { continuation ->
-                    db.collection("fichaje").document("$userEmail, $fecha, $horaActual").set(data)
+                    db.collection("fichaje").document("$userEmail, ${entradaOsalida.value},  $fecha, $horaActual").set(data)
                         .addOnSuccessListener {
                             continuation.resume(true)
                             _fichajeCorrecto.value = 1
@@ -340,6 +343,27 @@ class FicharModelView @Inject constructor() : ViewModel() {
         }
     }
 
+    fun imprimirEstado() {
+        val db = FirebaseFirestore.getInstance()
+        val userEmail = FirebaseAuth.getInstance().currentUser?.email
 
-}
+        db.collection("ultimoFichaje").document(userEmail.toString()).get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    val entradaOSalidaa = document.getString("entradaOSalida")
+                    Log.d("Firestore", "entradaOSalida: ${entradaOSalidaa.toString()}")
+                    _estadoEntradaOSalida.value = entradaOSalidaa.toString()
+                } else {
+                    Log.d("Firestore", "No such document")
+                    _estadoEntradaOSalida.value = "No hay datos del ultimo fichaje"
+                }
+
+            }
+            .addOnFailureListener { exception ->
+                Log.d("Firestore", "get failed with ", exception)
+            }
+
+
+
+    }}
 

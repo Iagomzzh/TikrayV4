@@ -51,6 +51,9 @@ fun Fichar(ficharModelView: FicharModelView, navigation: NavHostController) {
         val obtenerUbi by ficharModelView.obtenerUbi.observeAsState(initial = false)
         val fichajeCorrecto by ficharModelView.fichajeCorrecto.observeAsState(initial = 3)
         val estadoFichajes by ficharModelView.estadoFichaje.observeAsState()
+        ficharModelView.imprimirEstado()
+
+
 
 
 
@@ -183,7 +186,7 @@ fun Fichar(ficharModelView: FicharModelView, navigation: NavHostController) {
         ficharModelView.Alpulsar(estadoPermiso = estadoPermiso, dialogoDeError = dialogoError)
 
         Text(
-            text = estadoFichajes.toString(),
+            text = ficharModelView.estadoEntradaOSalida.value.toString(),
             color = Color.White,
             modifier = Modifier.constrainAs(estadoFichaje) {
                 start.linkTo(parent.start)
